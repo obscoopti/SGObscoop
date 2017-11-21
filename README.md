@@ -1,0 +1,2 @@
+# SGObscoop
+Sistema Gerencial Obscoop
