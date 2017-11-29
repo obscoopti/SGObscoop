@@ -27,8 +27,13 @@ class CoopController extends Controller
     }
 
     public function upload_coop(Request $request){
-        return view('upload_coop');
+        $coop = DB::table('coop.instituicao')
+                ->where('id','=', $request->input('id'))
+                ->first();
+        return view('upload_coop')
+            ->with("coop", $coop);
     }
+
     public function fonte_coop(Request $request){
     		// return $request->input('id');
     		$coop = DB::table('coop.instituicao')
