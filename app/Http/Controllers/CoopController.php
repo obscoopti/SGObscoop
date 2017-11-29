@@ -24,4 +24,8 @@ class CoopController extends Controller
     	return view('lista_coop')
     		->with('lista_coop', $lista_coop);
     }
+
+    public function upload_coop(Request $request){
+        return view('upload_coop');
+    }
 }
