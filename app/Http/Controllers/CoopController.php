@@ -18,7 +18,9 @@ class CoopController extends Controller
     }
 
     public function lista_coop(){
-    	$lista_coop = DB::table('coop.instituicao')->get();
+    	$lista_coop = DB::table('coop.instituicao')
+    		// ->take(5)
+    		->get();
     	return view('lista_coop')
     		->with('lista_coop', $lista_coop);
     }
