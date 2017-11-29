@@ -22,10 +22,19 @@ class CoopController extends Controller
     		// ->take(5)
     		->get();
     	return view('lista_coop')
-    		->with('lista_coop', $lista_coop);
+    		->with('lista_coop', $lista_coop)
+    		->render();
     }
 
     public function upload_coop(Request $request){
+        return view('upload_coop');
+    }
+    public function fonte_coop(Request $request){
+    		// return $request->input('id');
+    		$coop = DB::table('coop.instituicao')
+    			->where('id','=', $request->input('id'))
+    			->first();
+				return var_dump($coop);
         return view('upload_coop');
     }
 }

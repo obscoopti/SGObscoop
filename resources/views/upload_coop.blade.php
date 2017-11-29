@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    Tutorial a ser descrito sobre o que SGObscopp faz.
+                    Upload coop.
                 </div>
             </div>
         </div>
