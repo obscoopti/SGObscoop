@@ -18,6 +18,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/lista_coop', 'CoopController@lista_coop');
 
 Auth::routes();
 

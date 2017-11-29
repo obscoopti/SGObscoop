@@ -12,6 +12,8 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js" rel="stylesheet">
 </head>
 <body>
     <div id="app">
@@ -46,7 +48,7 @@
                             <li><a href="{{ route('login') }}">Login</a></li>
                             <li><a href="{{ route('register') }}">Register</a></li>
                         @else
-                            <li><a href="{{ url('/') }}">Cooperativas</a></li>
+                            <li><a href="{{ url('/lista_coop') }}">Cooperativas</a></li>
                             <li><a href="{{ url('/') }}">Pesquisadores</a></li>
                             <li><a href="{{ url('/') }}">Municípios</a></li>
                             <li class="dropdown">
