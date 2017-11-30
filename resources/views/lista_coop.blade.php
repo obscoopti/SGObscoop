@@ -19,7 +19,8 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                   <div class="right" style="float:right;margin-top:-7px;">
-                    <button type="button" class="btn btn-success">+ Nova Cooperativa</button>
+                    <button type="button" class="btn btn-success">
+                      <a style=" all: unset;" href="{{url('nova_coop')}}">+ Nova Cooperativa</a></button>
                   </div>
                   <div class="left">
                     Lista de cooperativas

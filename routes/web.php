@@ -21,6 +21,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/lista_coop', 'CoopController@lista_coop');
 Route::get('/upload_coop', 'CoopController@upload_coop');
 Route::get('/fonte_coop', 'CoopController@fonte_coop');
+Route::get('/nova_coop', 'CoopController@nova_coop');
 
 Auth::routes();
 
