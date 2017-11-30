@@ -37,6 +37,17 @@ class CoopController extends Controller
             ->with("coop", $coop);
     }
 
+    public function estatuto_coop(Request $request){
+        $estatuto = DB::table('coop.estatuto')
+                ->select('ano_estatuto', 'estatuto_completo')
+                ->where('cnpj_estatuto','=', $request->input('cnpj'))
+                ->orwhere('cnpj_estatuto_completo','=', $request->input('cnpj'))
+                ->get();
+        return view('estatuto_coop')
+            ->with("estatuto", $estatuto)
+            ->with("cnpj", $request->cnpj);
+    }
+
     public function fonte_coop(Request $request){
     		// return $request->input('id');
     		$coop = DB::table('coop.instituicao')
