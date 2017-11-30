@@ -42,8 +42,12 @@ class CoopController extends Controller
     		$coop = DB::table('coop.instituicao')
     			->where('id','=', $request->input('id'))
     			->first();
-				return var_dump($coop);
-        return view('upload_coop');
+        return view('fonte_coop')
+        	->with('coop',$coop);
+    }
+
+    public function nova_coop(Request $request){
+    	return view('nova_coop');
     }
 
     public function showUploadFile(Request $request) {
