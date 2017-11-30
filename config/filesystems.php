@@ -48,6 +48,12 @@ return [
             'root' => storage_path('app'),
         ],
 
+        'gdrive' => [
+            'driver' => 'local',
+            'root' => 'G:',
+        ],
+
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

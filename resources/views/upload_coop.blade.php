@@ -34,7 +34,7 @@
                         </select>
                         <br>
                         <br>
-                        <strong>Ano:</strong>
+                        <strong>Ano do Arquivo:</strong>
                         <select>
                             <option value="2010">2010</option>
                             <option value="2011">2011</option>
@@ -45,6 +45,17 @@
                             <option value="2016">2016</option>
                             <option value="2017">2017</option>
                         </select>
+                        <br>
+                        <br>
+                        @php
+                            echo Form::open(array('url' => '/upload_coop','files'=>'true') );
+                            
+                            echo Form::file('image') ;
+                            echo "<br>";
+                            echo Form::submit('Upload File') ;
+                            echo Form::close() ;
+                        @endphp
+
                     </div>                                  
                 </div>
             </div>
