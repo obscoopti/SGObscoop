@@ -7,7 +7,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div>
-                         Fonte de dados
+                         Estatutos
                     </div>
                     <div align="right" style="float:right;margin-top:-22px;">
                         <fonte style="font-family:verdana"> 
@@ -24,31 +24,16 @@
                             {{ session('status') }}
                         </div>
                     @endif
-                    <div align="center">
-                        <strong>Ano:</strong>
-                        <select>
-                            <option value="2010">2010</option>
-                            <option value="2011">2011</option>
-                            <option value="2012">2012</option>
-                            <option value="2013">2013</option>
-                            <option value="2014">2014</option>
-                            <option value="2015">2015</option>
-                            <option value="2016">2016</option>
-                            <option value="2017">2017</option>
-                        </select>
-                        <table>
-                            <tr>
-                                <td>  RA: </td><td>{{(true)?" &#x25A2;": "&#x2714;"}}</td>
-                            </tr> 
-                           <tr>
-                                <td> BP: </td><td>{{(false)?" &#x25A2;": "&#x2714;"}}</td>
-                            </tr>  
-                            <tr>
-                                <td>  DMPL: </td><td>{{(true)?" &#x25A2;": "&#x2714;"}}</td>
-                            </tr>        
-                            <tr>
-                                <td> Balancete:</td><td> {{(false)?" &#x25A2;": "&#x2714;"}}</td>
-                            </tr>
+                    <div align="center" >
+                        <table class="table table-striped table-bordered table-hover table-condensed">
+                                <thead>
+                                    <th> <strong> Ano </strong></th> <th> <strong> Status </strong> </th>
+                                </thead>
+                            @foreach($estatutos as $estatuto)
+                                <tr>
+                                    <td>  {{$estatuto->ano_estatuto}} </td><td> {{($estatuto->estatuto_completo)?" &#x2714;": "&#x25A2;"}}</td>
+                                </tr>
+                            @endforeach  
                         </table>
                     </div>                                  
                 </div>

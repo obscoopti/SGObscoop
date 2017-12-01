@@ -49,13 +49,11 @@
                         <br>
                         @php
                             echo Form::open(array('url' => '/upload_coop','files'=>'true') );
-                            
                             echo Form::file('image') ;
                             echo "<br>";
                             echo Form::submit('Upload File') ;
                             echo Form::close() ;
                         @endphp
-
                     </div>                                  
                 </div>
             </div>

@@ -103,6 +103,10 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
+        'nome' => [
+            'required' => 'Pre..cioso :attribute',
+            'numeric' => 'Pre..cioso :attribute numeric',
+        ],
     ],
 
     /*

@@ -39,13 +39,14 @@ class CoopController extends Controller
     }
 
     public function estatuto_coop(Request $request){
-        $estatuto = DB::table('coop.estatuto')
+        $estatutos = DB::table('coop.estatuto')
                 ->select('ano_estatuto', 'estatuto_completo')
                 ->where('cnpj_estatuto','=', $request->input('cnpj'))
                 ->orwhere('cnpj_estatuto_completo','=', $request->input('cnpj'))
+                ->orderby('ano_estatuto','asc')
                 ->get();
         return view('estatuto_coop')
-            ->with("estatuto", $estatuto)
+            ->with("estatutos", $estatutos)
             ->with("cnpj", $request->cnpj);
     }
 
@@ -62,6 +63,14 @@ class CoopController extends Controller
     	return view('nova_coop');
     }
 
+    public function submit_coop(Request $request){
+       
+       // return var_dump ($request->all());
+       $this->validate($request,[
+          'nome'=>'required'
+      ]);
+      return $request->all();
+    }
     public function showUploadFile(Request $request) {
       $file = $request->file('image') ;
    
