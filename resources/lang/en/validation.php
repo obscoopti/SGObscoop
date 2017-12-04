@@ -104,8 +104,8 @@ return [
             'rule-name' => 'custom-message',
         ],
         'nome' => [
-            'required' => 'Pre..cioso :attribute',
-            'numeric' => 'Pre..cioso :attribute numeric',
+            'required' => 'Este campo ":attribute" é obrigatório',
+            
         ],
     ],
 
@@ -120,6 +120,7 @@ return [
     |
     */
 
-    'attributes' => [],
-
+    'attributes' => [
+        'nome' => 'Nome Cooperativa',
+    ],
 ];
