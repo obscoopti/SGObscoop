@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Instituicao;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests;
@@ -64,10 +65,22 @@ class CoopController extends Controller
     }
 
     public function submit_coop(Request $request){
-       
-       // return var_dump ($request->all());
        $this->validate($request,[
           'nome'=>'required'
+      ]);
+      Instituicao::create([
+        'cnpj'=>$request->cnpj, 'telefone'=>$request->telefone,
+        'fax'=>$request->fax, 'natureza_juridica'=>$request->natureza,
+        'tipo'=>$request->tipo, 'situacao'=>$request->sit,
+        'auditor'=>$request->auditor, 'endereco_eletronico'=>$request->email,
+        'codigo_compensacao'=>$request->cod_comp, 'nome'=>$request->nome,
+        'endereco'=>$request->end, 'complemento'=>$request->compl,
+        'bairro'=>$request->bairro, 'cep'=>$request->cep,
+        'municipio'=>$request->municipio, 'uf'=>$request->uf,
+        'tipo_cooperativa'=>$request->tipo_coop, 'classe_cooperativa'=>$request->class_coop,
+        'site'=>$request->site, 'categ_coop_sing'=>$request->cat_coop,
+        'filiacao'=>$request->filiacao, 'lat'=>$request->lat,
+        'long'=>$request->long,
       ]);
       return $request->all();
     }

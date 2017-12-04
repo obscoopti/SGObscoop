@@ -51,95 +51,205 @@
                         </tr>
                         <tr>
                           <td>
-                            CNPJ Cooperativa:  {{ Form::text('cnpj') }}
+                            <div class="col-md-6">
+                                 CNPJ Cooperativa: 
+                            </div>
+                            <div class="col-md-6">
+                                  {{ Form::text('cnpj') }}
+                            </div>
                           </td>
                           <td>
-                            CEP: {{ Form::text('cep') }}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            Endereço:  {{ Form::text('end') }}
-                          </td>
-                          <td>
-                            Complemento:  {{ Form::text('compl') }}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            Bairro:  {{ Form::text('bairro') }}
-                          </td>
-                          <td>
-                            Município:  {{ Form::text('municipio') }}
+                            <div class="col-md-6">
+                              CEP: 
+                            </div>
+                            <div class="col-md-6">
+                              {{ Form::text('cep') }}
+                            </div>
                           </td>
                         </tr>
                         <tr>
                           <td>
-                            E-mail: {{ Form::text('email') }}
+                            <div class="col-md-6">
+                              Endereço:
+                            </div>
+                            <div class="col-md-6">
+                              {{ Form::text('end') }}
+                            </div>
                           </td>
                           <td>
-                            Telefone:  {{ Form::text('telefone') }}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            Fax:  {{ Form::text('fax') }}
-                          </td>
-                          <td>
-                            UF:  {{ Form::text('uf') }}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            Site:  {{ Form::text('site') }}
-                          </td>
-                          <td>
-                            Tipo Cooperativa:  {{ Form::text('tipo_coop') }}
+                            <div class="col-md-6">
+                              Complemento:
+                            </div>
+                            <div class="col-md-6">  
+                              {{ Form::text('compl') }}
+                            </div>
                           </td>
                         </tr>
                         <tr>
                           <td>
-                            Natureza Jurídica:  {{ Form::text('natureza') }}
+                            <div class="col-md-6">
+                              Bairro:
+                            </div>
+                            <div class="col-md-6">  
+                              {{ Form::text('bairro') }}
+                            </div>
                           </td>
                           <td>
-                            Situação Cooperativa:  {{ Form::text('sit') }}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            Auditor:  {{ Form::text('auditor') }}
-                          </td>
-                          <td>
-                            Código Compensação:  {{ Form::text('cod_comp') }}
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            Classe Cooperativa:  {{ Form::text('class_coop') }}
-                          </td>
-                          <td>
-                            Categoria Cooperativa:  {{ Form::text('cat_coop') }}
+                            <div class="col-md-6">
+                              Município:
+                            </div>
+                            <div class="col-md-6">  
+                              {{ Form::text('municipio') }}
+                            </div>
                           </td>
                         </tr>
                         <tr>
                           <td>
-                            Filiação:  {{ Form::text('filiacao') }}
+                            <div class="col-md-6">
+                              E-mail:
+                            </div>
+                            <div class="col-md-6"> 
+                              {{ Form::text('email') }}
+                            </div>
                           </td>
                           <td>
-                            Latitude:  {{ Form::text('lat') }}
+                            <div class="col-md-6">
+                              Telefone:
+                            </div>
+                            <div class="col-md-6">  
+                              {{ Form::text('telefone') }}
+                            </div>
                           </td>
                         </tr>
                         <tr>
                           <td>
-                            Longitude:  {{ Form::text('long') }}
+                            <div class="col-md-6">
+                              Fax:
+                            </div>
+                            <div class="col-md-6">  
+                              {{ Form::text('fax') }}
+                            </div>
                           </td>
                           <td>
-                            Nome Cooperativa: {{ Form::text('nome', $value = null) }}
+                            <div class="col-md-6">
+                              UF:
+                            </div>
+                            <div class="col-md-6">  
+                              {{ Form::text('uf') }}
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="col-md-6">
+                              Site:
+                            </div>
+                            <div class="col-md-6">  
+                              {{ Form::text('site') }}
+                            </div>
+                          </td>
+                          <td>
+                            <div class="col-md-6">
+                              Tipo Cooperativa:
+                            </div>
+                            <div class="col-md-6">  
+                              {{ Form::text('tipo_coop') }}
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="col-md-6">
+                              Natureza Jurídica:
+                            </div>
+                            <div class="col-md-6">  
+                              {{ Form::text('natureza') }}
+                            </div>
+                          </td>
+                          <td>
+                            <div class="col-md-6">
+                              Situação Cooperativa:
+                            </div>
+                            <div class="col-md-6">  
+                              {{ Form::text('sit') }}
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="col-md-6">
+                              Auditor:
+                            </div>
+                            <div class="col-md-6">  
+                              {{ Form::text('auditor') }}
+                            </div>
+                          </td>
+                          <td>
+                            <div class="col-md-6">
+                              Código Compensação:
+                            </div>  
+                            <div class="col-md-6">
+                              {{ Form::text('cod_comp') }}
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="col-md-6">
+                              Classe Cooperativa:
+                            </div>
+                            <div class="col-md-6">  
+                              {{ Form::text('class_coop') }}
+                            </div>
+                          </td>
+                          <td>
+                            <div class="col-md-6">
+                              Categoria Cooperativa:
+                            </div>
+                            <div class="col-md-6">  
+                              {{ Form::text('cat_coop') }}
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="col-md-6">
+                              Filiação:
+                            </div>
+                            <div class="col-md-6">  
+                              {{ Form::text('filiacao') }}
+                            </div>
+                          </td>
+                          <td>
+                            <div class="col-md-6">
+                              Latitude:
+                            </div>
+                            <div class="col-md-6">  
+                              {{ Form::text('lat') }}
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="col-md-6">
+                              Longitude:
+                            </div>
+                            <div class="col-md-6">  
+                              {{ Form::text('long') }}
+                            </div>
+                          </td>
+                          <td>
+                            <div class="col-md-6">
+                              Nome Cooperativa:
+                            </div>
+                            <div class="col-md-6"> 
+                              {{ Form::text('nome') }}
+                            </div>
                           </td>
                         </tr>
                       </table>
-                      {{ Form::close() }}
                       {{Form::submit('Cadastrar!')}}
+                      {{ Form::close() }}
                     </div>
                 </div>
             </div>
