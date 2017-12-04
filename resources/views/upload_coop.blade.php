@@ -2,6 +2,15 @@
 
 @section('content')
 <div class="container">
+    @if ($errors->any())
+      <div class="alert alert-danger">
+          <ul>
+              @foreach ($errors->all() as $error)
+                  <li>{{ $error }}</li>
+              @endforeach
+          </ul>
+      </div><br />
+    @endif
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default">
@@ -25,35 +34,27 @@
                         </div>
                     @endif
                     <div align="center">
-                        <strong>Tipo de Arquivo:</strong>
-                        <select>
-                            <option value="volvo">A</option>
-                            <option value="saab">B</option>
-                            <option value="opel">C</option>
-                            <option value="audi">D</option>
-                        </select>
-                        <br>
-                        <br>
-                        <strong>Ano do Arquivo:</strong>
-                        <select>
-                            <option value="2010">2010</option>
-                            <option value="2011">2011</option>
-                            <option value="2012">2012</option>
-                            <option value="2013">2013</option>
-                            <option value="2014">2014</option>
-                            <option value="2015">2015</option>
-                            <option value="2016">2016</option>
-                            <option value="2017">2017</option>
-                        </select>
-                        <br>
-                        <br>
-                        @php
-                            echo Form::open(array('url' => '/upload_coop','files'=>'true') );
-                            echo Form::file('image') ;
-                            echo "<br>";
-                            echo Form::submit('Upload File') ;
-                            echo Form::close() ;
-                        @endphp
+                     {{Form::open(array('url' => '/upload_coop','files'=>'true') ) }}
+                     {{Form::label('tArq', 'Tipo de arquivo:')}}
+                     {{Form::select('tArq', ['balancete' => 'Balancete', 'ata' => 'Ata']) }} 
+                     <br> 
+                     <br> 
+                     {{Form::label('anoArq', 'Ano do arquivo:')}}
+                     {{Form::select('anoArq', ['2010' => '2010',
+                                                 '2011' => '2011',
+                                                 '2012' => '2012',
+                                                 '2013' => '2013',
+                                                 '2014' => '2014',
+                                               ]) }}
+
+                     <br>
+                     <br>
+                     {{Form::file('arq') }}
+                     {{Form::hidden('coop_id',$coop->id) }}
+                     {{Form::hidden('coop_cnpj',$coop->cnpj) }}
+                     <br>
+                     {{Form::submit('Upload File') }}
+                     {{Form::close() }}
                     </div>                                  
                 </div>
             </div>

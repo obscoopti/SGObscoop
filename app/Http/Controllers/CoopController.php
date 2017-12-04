@@ -72,7 +72,16 @@ class CoopController extends Controller
       return $request->all();
     }
     public function showUploadFile(Request $request) {
-      $file = $request->file('image') ;
+      $this->validate($request,[
+        'arq'=>'required',
+        'tArq'=>'required',
+        'anoArq'=>'required',
+        'coop_id'=>'required',
+        'coop_cnpj'=>'required',
+        ]
+      );
+      // return $request->all();
+      $file = $request->file('arq') ;
    
       //Display File Name
       echo 'File Name: '.$file->getClientOriginalName() ;
@@ -92,10 +101,12 @@ class CoopController extends Controller
    
       //Display File Mime Type
       echo 'File Mime Type: '.$file->getMimeType() ;
+
+      $file_name = $request->coop_cnpj."_".$request->tArq."_".$request->anoArq.'.'.$file->getClientOriginalExtension();
    
       //Move Uploaded File
       $destinationPath = 'uploads';
-      // $file->move($destinationPath,$file->getClientOriginalName() );
+      $file->move($destinationPath,$file_name );
       // Storage::disk('gdrive')->put('churras.txt', $file);
    }
 }
