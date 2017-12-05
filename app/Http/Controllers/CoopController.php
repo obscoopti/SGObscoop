@@ -66,21 +66,22 @@ class CoopController extends Controller
 
     public function submit_coop(Request $request){
        $this->validate($request,[
-          'nome'=>'required'
+          'nome_coop'=>'required'
       ]);
+       $cnpj = str_replace (  array('.', '-', '/') ,  '' ,  $request->cnpj_coop );
       Instituicao::create([
-        'cnpj'=>$request->cnpj, 'telefone'=>$request->telefone,
-        'fax'=>$request->fax, 'natureza_juridica'=>$request->natureza,
-        'tipo'=>$request->tipo, 'situacao'=>$request->sit,
-        'auditor'=>$request->auditor, 'endereco_eletronico'=>$request->email,
-        'codigo_compensacao'=>$request->cod_comp, 'nome'=>$request->nome,
-        'endereco'=>$request->end, 'complemento'=>$request->compl,
-        'bairro'=>$request->bairro, 'cep'=>$request->cep,
-        'municipio'=>$request->municipio, 'uf'=>$request->uf,
-        'tipo_cooperativa'=>$request->tipo_coop, 'classe_cooperativa'=>$request->class_coop,
-        'site'=>$request->site, 'categ_coop_sing'=>$request->cat_coop,
-        'filiacao'=>$request->filiacao, 'lat'=>$request->lat,
-        'long'=>$request->long,
+        'cnpj'=>$cnpj, 'telefone'=>$request->telefone_coop,
+        'fax'=>$request->fax_coop, 'natureza_juridica'=>$request->natureza_coop,
+        'tipo'=>$request->tipo_coop, 'situacao'=>$request->sit_coop,
+        'auditor'=>$request->auditor_coop, 'endereco_eletronico'=>$request->email_coop,
+        'codigo_compensacao'=>$request->cod_comp_coop, 'nome'=>$request->nome_coop,
+        'endereco'=>$request->end_coop, 'complemento'=>$request->compl_coop,
+        'bairro'=>$request->bairro_coop, 'cep'=>$request->cep_coop,
+        'municipio'=>$request->municipio_coop, 'uf'=>$request->uf_coop,
+        'tipo_cooperativa'=>$request->tipo_coope, 'classe_cooperativa'=>$request->class_coop,
+        'site'=>$request->site_coop, 'categ_coop_sing'=>$request->cat_coop,
+        'filiacao'=>$request->filiacao_coop, 'lat'=>$request->lat_coop,
+        'long'=>$request->long_coop,
       ]);
       return $request->all();
     }
