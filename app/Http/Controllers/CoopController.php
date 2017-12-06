@@ -33,7 +33,8 @@ class CoopController extends Controller
     }
 
     public function upload_coop(Request $request){
-        $coop = DB::table('coop.instituicao')
+        $coop = DB::table('instituicao')
+        /*$coop = DB::table('coop.instituicao')*/
                 ->where('id','=', $request->input('id'))
                 ->first();
         return view('upload_coop')
@@ -54,7 +55,8 @@ class CoopController extends Controller
 
     public function fonte_coop(Request $request){
     		// return $request->input('id');
-    		$coop = DB::table('coop.instituicao')
+    		$coop = DB::table('instituicao')
+        /*$coop = DB::table('coop.instituicao')*/
     			->where('id','=', $request->input('id'))
     			->first();
         return view('fonte_coop')
