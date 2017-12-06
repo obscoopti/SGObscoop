@@ -28,7 +28,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                   <div class="left">
-                   Nova Cooperativa
+                   Editar Cooperativa
                   </div>
                 </div>
                 <div class="panel-body">
@@ -38,15 +38,15 @@
                         </div>
                     @endif
                     <div>
-                      {{ Form::open(array('url' => '/nova_coop')) }}
+                      {{ Form::open(array('url' => '/editar_coop')) }}
                       <table class="table table-striped table-bordered table-hover table-condensed">
                         <tr>
                           <td>
-                            Cooperativa: {{ Form::select('tipo_coop', array(
+                            Cooperativa: {{ Form::select('tipo_coop' ,array(
                                         'null' => 'Selecione',
                                         'Cooperativa de Agro' => 'Cooperativa de Agro',
                                         'Cooperativa de Crédito' => 'Cooperativa de Crédito',
-                                        )) }}
+                                        ), $coop->tipo) }}
                           </td>
                         </tr>
                         <tr>
@@ -55,7 +55,7 @@
                               Nome Cooperativa:
                             </div>
                             <div class="col-md-6"> 
-                              {{ Form::text('nome_coop') }}
+                              {{ Form::text('nome_coop', $coop->nome) }}
                             </div>
                           </td>
                           <td>
@@ -63,7 +63,7 @@
                               CEP: 
                             </div>
                             <div class="col-md-6">
-                              {{ Form::text('cep_coop', '', array('onKeypress'=>'MascaraCep(this)', 'placeholder'=>'00000-000')) }}
+                              {{ Form::text('cep_coop', $coop->cep, array('onKeypress'=>'MascaraCep(this)', 'placeholder'=>'00000-000')) }}
                             </div>
                           </td>
                         </tr>
@@ -73,7 +73,7 @@
                               CNPJ Cooperativa: 
                             </div>
                             <div class="col-md-6">
-                              {{ Form::text('cnpj_coop', '', array('onKeypress'=>'MascaraCNPJ(this)', 'placeholder'=>'00.000.000/0000-00')) }}
+                              {{ Form::text('cnpj_coop', $coop->cnpj, array('onKeypress'=>'MascaraCNPJ(this)', 'placeholder'=>'00.000.000/0000-00')) }}
                             </div>
                           </td>
                           <td>
@@ -81,7 +81,7 @@
                               Endereço:
                             </div>
                             <div class="col-md-6">
-                              {{ Form::text('end_coop', '', array('placeholder'=>'Ex:Rua, Número')) }}
+                              {{ Form::text('end_coop', $coop->endereco, array('placeholder'=>'Ex:Rua, Número')) }}
                             </div>
                           </td>
                         </tr>
@@ -91,7 +91,7 @@
                               Tipo Cooperativa:
                             </div>
                             <div class="col-md-6">  
-                              {{ Form::text('tipo_coope', '', array('placeholder'=>'Ex:Livre de Admissão')) }}
+                              {{ Form::text('tipo_coope', $coop->tipo_cooperativa, array('placeholder'=>'Ex:Livre de Admissão')) }}
                             </div>
                           </td>
                           <td>
@@ -99,7 +99,7 @@
                               Complemento:
                             </div>
                             <div class="col-md-6">  
-                              {{ Form::text('compl_coop', '', array('placeholder'=>'Sala,Andar,Apto,Edifício')) }}
+                              {{ Form::text('compl_coop', $coop->complemento, array('placeholder'=>'Sala,Andar,Apto,Edifício')) }}
                             </div>
                           </td>
                         </tr>
@@ -109,7 +109,7 @@
                               Categoria Cooperativa:
                             </div>
                             <div class="col-md-6">  
-                              {{ Form::text('cat_coop', '', array('placeholder'=>'Ex:Clássica')) }}
+                              {{ Form::text('cat_coop', $coop->categ_coop_sing, array('placeholder'=>'Ex:Clássica')) }}
                             </div>
                           </td>
                           <td>
@@ -117,7 +117,7 @@
                               Bairro:
                             </div>
                             <div class="col-md-6">  
-                              {{ Form::text('bairro_coop', '', array('placeholder'=>'Ex:Centro')) }}
+                              {{ Form::text('bairro_coop', $coop->bairro, array('placeholder'=>'Ex:Centro')) }}
                             </div>
                           </td>
                         </tr>
@@ -127,7 +127,7 @@
                               Classe Cooperativa:
                             </div>
                             <div class="col-md-6">  
-                              {{ Form::text('class_coop', '', array('placeholder'=>'Ex:Singular')) }}
+                              {{ Form::text('class_coop', $coop->classe_cooperativa, array('placeholder'=>'Ex:Singular')) }}
                             </div>
                           </td>
                           <td>
@@ -135,7 +135,7 @@
                               Município:
                             </div>
                             <div class="col-md-6">  
-                              {{ Form::text('municipio_coop', '', array('placeholder'=>'Ex:São Paulo')) }}
+                              {{ Form::text('municipio_coop', $coop->municipio, array('placeholder'=>'Ex:São Paulo')) }}
                             </div>
                           </td>
                         </tr>
@@ -145,7 +145,7 @@
                               Situação Cooperativa:
                             </div>
                             <div class="col-md-6">  
-                              {{ Form::text('sit_coop', '', array('placeholder'=>'Ex:Autorizada em Atividade')) }}
+                              {{ Form::text('sit_coop', $coop->situacao, array('placeholder'=>'Ex:Autorizada em Atividade')) }}
                             </div>
                           </td>
                           <td>
@@ -153,7 +153,7 @@
                               UF:
                             </div>
                             <div class="col-md-6">  
-                              {{ Form::text('uf_coop', '', array('placeholder'=>'Ex: SP')) }}
+                              {{ Form::text('uf_coop', $coop->uf, array('placeholder'=>'Ex: SP')) }}
                             </div>
                           </td>
                         </tr>
@@ -163,7 +163,7 @@
                               Natureza Jurídica:
                             </div>
                             <div class="col-md-6">  
-                              {{ Form::text('natureza_coop', '', array('placeholder'=>'Ex:Sociedade Cooperativa')) }}
+                              {{ Form::text('natureza_coop', $coop->natureza_juridica, array('placeholder'=>'Ex:Sociedade Cooperativa')) }}
                             </div>
                           </td>
                           <td>
@@ -171,7 +171,7 @@
                               Telefone:
                             </div>
                             <div class="col-md-6">  
-                              {{ Form::text('telefone_coop', '', array('onKeypress'=>'MascaraTelefone(this)', 'placeholder'=>'(00)0000-0000')) }}
+                              {{ Form::text('telefone_coop', $coop->telefone, array('onKeypress'=>'MascaraTelefone(this)', 'placeholder'=>'(00)0000-0000')) }}
                             </div>
                           </td>
                         </tr>
@@ -181,7 +181,7 @@
                               Auditor:
                             </div>
                             <div class="col-md-6">  
-                              {{ Form::text('auditor_coop') }}
+                              {{ Form::text('auditor_coop', $coop->auditor) }}
                             </div>
                           </td>
                           <td>
@@ -189,7 +189,7 @@
                               Fax:
                             </div>
                             <div class="col-md-6">  
-                              {{ Form::text('fax_coop', '', array('onKeypress'=>'MascaraTelefone(this)', 'placeholder'=>'(00)0000-0000')) }}
+                              {{ Form::text('fax_coop', $coop->fax, array('onKeypress'=>'MascaraTelefone(this)', 'placeholder'=>'(00)0000-0000')) }}
                             </div>
                           </td>
                         </tr>
@@ -199,7 +199,7 @@
                               Código Compensação:
                             </div>  
                             <div class="col-md-6">
-                              {{ Form::text('cod_comp_coop') }}
+                              {{ Form::text('cod_comp_coop', $coop->codigo_compensacao) }}
                             </div>
                           </td>
                           <td>
@@ -207,7 +207,7 @@
                               E-mail:
                             </div>
                             <div class="col-md-6"> 
-                              {{ Form::text('email_coop', '', array('placeholder'=>'Ex:wiltor@gmail.com')) }}
+                              {{ Form::text('email_coop', $coop->endereco_eletronico, array('placeholder'=>'Ex:wiltor@gmail.com')) }}
                             </div>
                           </td>
                         </tr>
@@ -217,7 +217,7 @@
                               Filiação:
                             </div>
                             <div class="col-md-6">  
-                              {{ Form::text('filiacao_coop') }}
+                              {{ Form::text('filiacao_coop', $coop->filiacao) }}
                             </div>
                           </td>
                           <td>
@@ -225,7 +225,7 @@
                               Site:
                             </div>
                             <div class="col-md-6">  
-                              {{ Form::text('site_coop','', array('placeholder'=>'Ex:www.wiltor.com.br')) }}
+                              {{ Form::text('site_coop', $coop->site, array('placeholder'=>'Ex:www.wiltor.com.br')) }}
                             </div>
                           </td>
                         </tr>
@@ -235,7 +235,7 @@
                               Longitude:
                             </div>
                             <div class="col-md-6">  
-                              {{ Form::text('long_coop') }}
+                              {{ Form::text('long_coop', $coop->long) }}
                             </div>
                           </td>
                           <td>
@@ -243,12 +243,12 @@
                               Latitude:
                             </div>
                             <div class="col-md-6">  
-                              {{ Form::text('lat_coop') }}
+                              {{ Form::text('lat_coop', $coop->lat) }}
                             </div>
                           </td>
                         </tr>
                       </table>
-                      {{Form::submit('Cadastrar')}}
+                      {{Form::submit('Editar')}}
                       {{ Form::close() }}
                     </div>
                 </div>

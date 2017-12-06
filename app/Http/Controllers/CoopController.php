@@ -22,7 +22,8 @@ class CoopController extends Controller
     }
 
     public function lista_coop(){
-    	$lista_coop = DB::table('coop.instituicao')
+      $lista_coop = DB::table('instituicao')
+    	// $lista_coop = DB::table('coop.instituicao')
     		->select('id','cnpj','nome')
     		// ->take(5)
     		->get();
@@ -64,9 +65,25 @@ class CoopController extends Controller
     	return view('nova_coop');
     }
 
-    public function submit_coop(Request $request){
+    public function editar_coop(Request $request){
+      $coop = DB::table('instituicao')
+      // $coop = DB::table('coop.instituicao')
+                ->where('id','=', $request->input('id'))
+                ->first();
+      $request->session()->flash('id_session',$coop->id);
+      return view('editar_coop')
+        ->with('coop', $coop);
+
+    }
+
+    public function nova_submit_coop(Request $request){
        $this->validate($request,[
-          'nome_coop'=>'required'
+          'nome_coop'=>'required',
+          'cnpj_coop'=>'required|max:18',
+          'uf_coop'=>'max:2',
+          'telefone_coop'=>'max:14',
+          'fax_coop'=>'max:14',
+          'cep_coop'=>'max:9',
       ]);
        $cnpj = str_replace (  array('.', '-', '/') ,  '' ,  $request->cnpj_coop );
       Instituicao::create([
@@ -83,7 +100,39 @@ class CoopController extends Controller
         'filiacao'=>$request->filiacao_coop, 'lat'=>$request->lat_coop,
         'long'=>$request->long_coop,
       ]);
-      return $request->all();
+      return redirect('lista_coop')->with('status', 'Inserido com sucesso.');
+    }
+
+    public function editar_submit_coop(Request $request){
+      $id = $request->session()->get('id_session');
+
+       $this->validate($request,[
+          'nome_coop'=>'required',
+          'cnpj_coop'=>'required|max:18',
+          'uf_coop'=>'max:2',
+          'telefone_coop'=>'max:14',
+          'fax_coop'=>'max:14',
+          'cep_coop'=>'max:9',
+      ]);
+      $coop = Instituicao::find($id);
+
+      $cnpj = str_replace (  array('.', '-', '/') ,  '' ,  $request->cnpj_coop );
+      $coop->fill([
+        'cnpj'=>$cnpj, 'telefone'=>$request->telefone_coop,
+        'fax'=>$request->fax_coop, 'natureza_juridica'=>$request->natureza_coop,
+        'tipo'=>$request->tipo_coop, 'situacao'=>$request->sit_coop,
+        'auditor'=>$request->auditor_coop, 'endereco_eletronico'=>$request->email_coop,
+        'codigo_compensacao'=>$request->cod_comp_coop, 'nome'=>$request->nome_coop,
+        'endereco'=>$request->end_coop, 'complemento'=>$request->compl_coop,
+        'bairro'=>$request->bairro_coop, 'cep'=>$request->cep_coop,
+        'municipio'=>$request->municipio_coop, 'uf'=>$request->uf_coop,
+        'tipo_cooperativa'=>$request->tipo_coope, 'classe_cooperativa'=>$request->class_coop,
+        'site'=>$request->site_coop, 'categ_coop_sing'=>$request->cat_coop,
+        'filiacao'=>$request->filiacao_coop, 'lat'=>$request->lat_coop,
+        'long'=>$request->long_coop,
+      ]);
+      $coop->save();
+      return redirect()->back()->with('status', 'Editado com sucesso.');
     }
     public function showUploadFile(Request $request) {
       $this->validate($request,[

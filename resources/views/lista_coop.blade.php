@@ -50,12 +50,11 @@
                                     <td  class="col-md-7">{{$coop->nome}}</td>
                                     <td >Tipo</td>
                                     <td>
-                                      <div class="btn-group" role="group">
-                                        <a href="{{url('upload_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs">U</a>
+                                      <div class="btn-group" role="group">                    
                                         <a href="{{url('fonte_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs">F</a>
                                         <a href="{{url('estatuto_coop/?cnpj='.$coop->cnpj)}}" type="button" class="button btn btn-secondary btn-xs">E</a>
-                                        <a type="button" class="button btn btn-secondary btn-xs">R</a>
-                                        <a type="button" class="button btn btn-secondary btn-xs">P</a>
+                                        <a href="{{url('upload_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs"><span class="glyphicon glyphicon-upload"></span></a>
+                                        <a href="{{url('editar_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs"><span class="glyphicon glyphicon-edit"></span></a>
                                       </div>
                                     </td>
                                 </tr>

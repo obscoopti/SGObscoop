@@ -103,10 +103,26 @@ return [
         'attribute-name' => [
             'rule-name' => 'custom-message',
         ],
-        'nome' => [
+        'nome_coop' => [
             'required' => 'Este campo ":attribute" é obrigatório',
-            
         ],
+        'cnpj_coop' => [
+            'required' => 'Este campo ":attribute" é obrigatório.',
+            'numeric' => 'Este campo ":attribute" só aceita números.',
+            'max' =>  'Este campo ":attribute" não pode ter mais que 14 dígitos.'  
+        ],
+        'uf_coop' => [
+            'max' => 'Este campo ":attribute" não pode ter mais que 2 dígitos.'        
+        ],
+        'telefone_coop' => [
+            'max' => 'Este campo ":attribute" não pode ter mais que 10 dígitos.'
+        ],
+        'fax_coop' => [
+            'max' => 'Este campo ":attribute" não pode ter mais que 10 dígitos.'
+        ],
+        'cep_coop' => [
+            'max' => 'Este campo ":attribute" não pode ter mais que 8 dígitos.'
+        ]
     ],
 
     /*
@@ -121,6 +137,11 @@ return [
     */
 
     'attributes' => [
-        'nome' => 'Nome Cooperativa',
+        'nome_coop' => 'Nome Cooperativa',
+        'cnpj_coop' => 'CNPJ Cooperativa',
+        'uf_coop' => 'UF',
+        'telefone_coop' => 'Telefone',
+        'fax_coop' => 'Fax',
+        'cep_coop' => 'CEP',
     ],
 ];

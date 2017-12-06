@@ -23,8 +23,10 @@ Route::get('/upload_coop', 'CoopController@upload_coop');
 Route::get('/fonte_coop', 'CoopController@fonte_coop');
 Route::post('/upload_coop','CoopController@showUploadFile') ;
 Route::get('/nova_coop', 'CoopController@nova_coop');
-Route::post('/nova_coop', 'CoopController@submit_coop');
+Route::post('/nova_coop', 'CoopController@nova_submit_coop');
 Route::get('/estatuto_coop', 'CoopController@estatuto_coop');
+Route::get('/editar_coop', 'CoopController@editar_coop');
+Route::post('/editar_coop', 'CoopController@editar_submit_coop');
 
 Auth::routes();
 
