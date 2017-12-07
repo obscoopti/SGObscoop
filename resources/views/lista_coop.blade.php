@@ -48,7 +48,7 @@
                                 <tr>
                                     <td>{{$coop->cnpj}}</td>
                                     <td  class="col-md-7">{{$coop->nome}}</td>
-                                    <td >Tipo</td>
+                                    <td >{{$coop->tipo}}</td>
                                     <td>
                                       <div class="btn-group" role="group">                    
                                         <a href="{{url('fonte_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs">F</a>
