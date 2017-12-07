@@ -93,7 +93,7 @@ class CoopController extends Controller
       Instituicao::create([
         'cnpj'=>$cnpj, 'telefone'=>$request->telefone_coop,
         'fax'=>$request->fax_coop, 'natureza_juridica'=>$request->natureza_coop,
-        'tipo'=>$request->tipo_coop, 'situacao'=>$request->sit_coop,
+        'tipo'=>$request->seg_coop, 'situacao'=>$request->sit_coop,
         'auditor'=>$request->auditor_coop, 'endereco_eletronico'=>$request->email_coop,
         'codigo_compensacao'=>$request->cod_comp_coop, 'nome'=>$request->nome_coop,
         'endereco'=>$request->end_coop, 'complemento'=>$request->compl_coop,
@@ -125,7 +125,7 @@ class CoopController extends Controller
       $coop->fill([
         'cnpj'=>$cnpj, 'telefone'=>$request->telefone_coop,
         'fax'=>$request->fax_coop, 'natureza_juridica'=>$request->natureza_coop,
-        'tipo'=>$request->tipo_coop, 'situacao'=>$request->sit_coop,
+        'tipo'=>$request->seg_coop, 'situacao'=>$request->sit_coop,
         'auditor'=>$request->auditor_coop, 'endereco_eletronico'=>$request->email_coop,
         'codigo_compensacao'=>$request->cod_comp_coop, 'nome'=>$request->nome_coop,
         'endereco'=>$request->end_coop, 'complemento'=>$request->compl_coop,
