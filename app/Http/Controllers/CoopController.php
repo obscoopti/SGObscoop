@@ -60,8 +60,18 @@ class CoopController extends Controller
         /*$coop = DB::table('coop.instituicao')*/
     			->where('id','=', $request->input('id'))
     			->first();
+        $fonte = DB::table('arquivo_coop')
+          ->where('instituicao_id','=',$coop->id);
+
+        $ano = DB::table('arquivo_coop')
+          ->select('distinct ano')
+          ->where('instituicao_id','=',$coop->id);
+
+          return var_dump($ano);
+
         return view('fonte_coop')
-        	->with('coop',$coop);
+          ->with('coop',$coop)
+        	->with('fonte',$fonte);
     }
 
     public function nova_coop(Request $request){
