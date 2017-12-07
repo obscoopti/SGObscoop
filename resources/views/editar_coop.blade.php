@@ -42,8 +42,8 @@
                       <table class="table table-striped table-bordered table-hover table-condensed">
                         <tr>
                           <td>
-                            Cooperativa: {{ Form::select('tipo_coop' ,array(
-                                        'null' => 'Selecione',
+                            Segmento: {{ Form::select('seg_coop' ,array(
+                                        '' => 'Selecione',
                                         'Cooperativa de Agro' => 'Cooperativa de Agro',
                                         'Cooperativa de Crédito' => 'Cooperativa de Crédito',
                                         ), $coop->tipo) }}

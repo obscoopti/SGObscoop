@@ -122,7 +122,10 @@ return [
         ],
         'cep_coop' => [
             'max' => 'Este campo ":attribute" não pode ter mais que 8 dígitos.'
-        ]
+        ],  
+        'seg_coop' => [
+            'required' => 'Este campo ":attribute" é obrigatório.'
+        ],
     ],
 
     /*
@@ -143,5 +146,6 @@ return [
         'telefone_coop' => 'Telefone',
         'fax_coop' => 'Fax',
         'cep_coop' => 'CEP',
+        'seg_coop' => 'Seguimento',
     ],
 ];

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Instituicao;
+use App\Arquivo_coop;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests;
@@ -86,6 +87,7 @@ class CoopController extends Controller
           'telefone_coop'=>'max:14',
           'fax_coop'=>'max:14',
           'cep_coop'=>'max:9',
+          'seg_coop'=>'required',
       ]);
        $cnpj = str_replace (  array('.', '-', '/') ,  '' ,  $request->cnpj_coop );
       Instituicao::create([
@@ -115,6 +117,7 @@ class CoopController extends Controller
           'telefone_coop'=>'max:14',
           'fax_coop'=>'max:14',
           'cep_coop'=>'max:9',
+          'seg_coop'=>'required',
       ]);
       $coop = Instituicao::find($id);
 
@@ -170,8 +173,22 @@ class CoopController extends Controller
       $file_name = $request->coop_cnpj."_".$request->tArq."_".$request->anoArq.'.'.$file->getClientOriginalExtension();
    
       //Move Uploaded File
-      $destinationPath = 'uploads';
+      // $destinationPath = 'uploads';
+      $destinationPath = 'uploads/'.$request->tArq;
+
+      try{
+            Arquivo_coop::create([
+                  'tipo'=> $request->tArq, 
+                  'nome'=> $file_name, 
+                  'instituicao_id'=> $request->coop_id, 
+                  'ano'=> $request->anoArq,
+            ]);
+      }catch(\Exception $e){
+        return redirect()->back()->withErrors("Este tipo de arquivo ({$request->tArq}) já existe para {$request->anoArq}.");
+      }
       $file->move($destinationPath,$file_name );
       // Storage::disk('gdrive')->put('churras.txt', $file);
+      return redirect()->back()->with('status', 'Upload feito com sucesso.');
+
    }
 }
