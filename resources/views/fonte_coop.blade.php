@@ -25,31 +25,19 @@
                         </div>
                     @endif
                     <div align="center">
-                        <strong>Ano:</strong>
-                        <select>
-                            <option value="2010">2010</option>
-                            <option value="2011">2011</option>
-                            <option value="2012">2012</option>
-                            <option value="2013">2013</option>
-                            <option value="2014">2014</option>
-                            <option value="2015">2015</option>
-                            <option value="2016">2016</option>
-                            <option value="2017">2017</option>
-                        </select>
-                        <table>
-                            <tr>
-                                <td>  RA: </td><td>{{(true)?" &#x25A2;": "&#x2714;"}}</td>
-                            </tr> 
-                           <tr>
-                                <td> BP: </td><td>{{(false)?" &#x25A2;": "&#x2714;"}}</td>
-                            </tr>  
-                            <tr>
-                                <td>  DMPL: </td><td>{{(true)?" &#x25A2;": "&#x2714;"}}</td>
-                            </tr>        
-                            <tr>
-                                <td> Balancete:</td><td> {{(false)?" &#x25A2;": "&#x2714;"}}</td>
-                            </tr>
-                        </table>
+                        @foreach($tab_dados as $ano=>$dados)
+                          <strong>Ano: {{$ano}} </strong>
+                          <table>
+                            @foreach($dados as $kDado=>$vDado)
+                              <tr>
+                                <td> {{$kDado}}: </td>
+                                <td>{{($vDado)? "&#x2714;":"&#x25A2;"}} </td> 
+                              </tr>
+                            @endforeach
+                          </table>
+                          <br>
+                          <br>
+                        @endforeach
                     </div>                                  
                 </div>
             </div>

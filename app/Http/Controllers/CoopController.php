@@ -12,7 +12,18 @@ use Illuminate\Support\Facades\Storage;
 
 class CoopController extends Controller
 {
-    /**
+
+    protected $array_tFonte = [
+      'RA'=>'',
+      'BP'=>'',
+      'Estatuto'=>'',
+      'Ata'=>'',
+      'Balancete'=>'',
+      'DMPL'=>''
+    ];
+
+
+     /**
      * Create a new controller instance.
      *
      * @return void
@@ -60,18 +71,58 @@ class CoopController extends Controller
         /*$coop = DB::table('coop.instituicao')*/
     			->where('id','=', $request->input('id'))
     			->first();
-        $fonte = DB::table('arquivo_coop')
-          ->where('instituicao_id','=',$coop->id);
+        $fontes = DB::table('arquivo_coop')
+          ->select('nome','tipo','ano')
+          ->where('instituicao_id','=',$coop->id)
+          ->orderby('ano','asc')
+          ->get();
 
-        $ano = DB::table('arquivo_coop')
-          ->select('distinct ano')
-          ->where('instituicao_id','=',$coop->id);
+        // $anos = DB::table('arquivo_coop')
+        //   ->select('ano')
+        //   ->where('instituicao_id','=',$coop->id)
+        //   ->orderby('ano','asc')
+        //   ->distinct()
+        //   ->get();
+          $anos = DB::select(
+            DB::raw(
+              "select distinct ano::text from arquivo_coop where instituicao_id = {$coop->id}")
+          );
 
-          return var_dump($ano);
+          // return var_dump($anos);
+
+        $balancetes =DB::select(
+          DB::raw(
+            "select distinct substring(data_base::text from 1 for 4 ) as ano from coop.balancetes
+            where cnpj = '00000000' and
+            data_base::text like '%12'
+            order by substring(data_base::text from 1 for 4 ) asc" 
+          )
+        );
+
+        // $anos = array_merge($balancetes,$anos) ;
+        // $anos = $balancetes->merge($anos);
+        //   return var_dump($anos);
+        // $anos_aux = (array)$anos;
+        // $anos_aux = (array)array_unique($anos_aux);
+        // $anos = $anos->unique();
+          
+        $tab_dados = [];
+        foreach ($anos as $ano) {   //varia os anos encontrados 
+          $array_tFonte =  $this->array_tFonte; // Zera o vetor com os tipos do ano
+          foreach($array_tFonte as $kFonte=>$vFonte){ // varia os tipos para encontrar ocorrencia
+            foreach ($fontes as $fonte) { // varias as fontes vindas do bd e preenche ocorrencia
+              if($fonte->tipo == $kFonte && $fonte->ano == $ano->ano){
+                $array_tFonte[$kFonte] = 1; 
+              }
+            }
+          }
+          $tab_dados[$ano->ano] = [];
+          $tab_dados[$ano->ano] = $array_tFonte;
+        }
 
         return view('fonte_coop')
           ->with('coop',$coop)
-        	->with('fonte',$fonte);
+        	->with('tab_dados',$tab_dados);
     }
 
     public function nova_coop(Request $request){
