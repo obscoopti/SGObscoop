@@ -126,6 +126,9 @@ return [
         'seg_coop' => [
             'required' => 'Este campo ":attribute" é obrigatório.'
         ],
+        'arq' => [
+            'required' => 'Este campo ":attribute" é obrigatório.'
+        ],
     ],
 
     /*
@@ -147,5 +150,6 @@ return [
         'fax_coop' => 'Fax',
         'cep_coop' => 'CEP',
         'seg_coop' => 'Seguimento',
+        'arq' => 'Arquivo',
     ],
 ];

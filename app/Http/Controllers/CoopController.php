@@ -21,6 +21,14 @@ class CoopController extends Controller
       'Balancete'=>'',
       'DMPL'=>''
     ];
+    protected $array_lFonte = [
+      'RA'=>'RA',
+      'BP'=>'BP',
+      'Estatuto'=>'Estatuto',
+      'Ata'=>'Ata',
+      'Balancete'=>'Balancete',
+      'DMPL'=>'DMPL'
+    ];
 
 
      /**
@@ -50,6 +58,7 @@ class CoopController extends Controller
                 ->where('id','=', $request->input('id'))
                 ->first();
         return view('upload_coop')
+            ->with("array_lFonte", $this->array_lFonte)
             ->with("coop", $coop);
     }
 
@@ -77,48 +86,53 @@ class CoopController extends Controller
           ->orderby('ano','asc')
           ->get();
 
-        // $anos = DB::table('arquivo_coop')
-        //   ->select('ano')
-        //   ->where('instituicao_id','=',$coop->id)
-        //   ->orderby('ano','asc')
-        //   ->distinct()
-        //   ->get();
-          $anos = DB::select(
+          $anos['anos'] = DB::select(
             DB::raw(
-              "select distinct ano::text from arquivo_coop where instituicao_id = {$coop->id}")
+              "select distinct ano::integer from arquivo_coop where instituicao_id = {$coop->id}")
           );
 
           // return var_dump($anos);
 
-        $balancetes =DB::select(
+        // $balancetes 
+        $anos['balancetes']=DB::select(
           DB::raw(
-            "select distinct substring(data_base::text from 1 for 4 ) as ano from coop.balancetes
+            "select distinct substring(data_base::text from 1 for 4 )::integer as ano from coop.balancetes
             where cnpj = '00000000' and
             data_base::text like '%12'
-            order by substring(data_base::text from 1 for 4 ) asc" 
+            order by substring(data_base::text from 1 for 4 )::integer asc" 
           )
         );
 
-        // $anos = array_merge($balancetes,$anos) ;
-        // $anos = $balancetes->merge($anos);
-        //   return var_dump($anos);
-        // $anos_aux = (array)$anos;
-        // $anos_aux = (array)array_unique($anos_aux);
-        // $anos = $anos->unique();
+        //Faz o merge dos anos e tira repeticao
+        foreach($anos as $anos_aux)
+          foreach ($anos_aux as $ano)
+            $anos_f[(int)$ano->ano] = (int)$ano->ano; 
+
+        foreach($anos['balancetes'] as $balancete_aux)
+          $balancetes[$balancete_aux->ano] = $balancete_aux->ano; 
+            
+        sort($anos_f);
+        // var_dump($anos_f);
+        // return;
           
         $tab_dados = [];
-        foreach ($anos as $ano) {   //varia os anos encontrados 
+        foreach ($anos_f as $ano) { // varia os anos encontrados 
           $array_tFonte =  $this->array_tFonte; // Zera o vetor com os tipos do ano
           foreach($array_tFonte as $kFonte=>$vFonte){ // varia os tipos para encontrar ocorrencia
             foreach ($fontes as $fonte) { // varias as fontes vindas do bd e preenche ocorrencia
-              if($fonte->tipo == $kFonte && $fonte->ano == $ano->ano){
+              if($fonte->tipo == $kFonte && $fonte->ano == $ano){
+                $array_tFonte[$kFonte] = 1; 
+              }
+              if(in_array($ano, $balancetes) && $kFonte == 'Balancete'){
                 $array_tFonte[$kFonte] = 1; 
               }
             }
           }
-          $tab_dados[$ano->ano] = [];
-          $tab_dados[$ano->ano] = $array_tFonte;
+          $tab_dados[(int)$ano] = [];
+          $tab_dados[(int)$ano] = $array_tFonte;
         }
+          // var_dump($tab_dados);
+          // return;
 
         return view('fonte_coop')
           ->with('coop',$coop)

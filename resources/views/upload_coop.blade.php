@@ -36,7 +36,7 @@
                     <div align="center">
                      {{Form::open(array('url' => '/upload_coop','files'=>'true') ) }}
                      {{Form::label('tArq', 'Tipo de arquivo:')}}
-                     {{Form::select('tArq', ['Balancete' => 'Balancete', 'Ata' => 'Ata']) }} 
+                     {{Form::select('tArq', $array_lFonte) }} 
                      <br> 
                      <br> 
                      {{Form::label('anoArq', 'Ano do arquivo:')}}
