@@ -53,6 +53,7 @@
                                       <div class="btn-group" role="group">                    
                                         <a href="{{url('fonte_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs">F</a>
                                         <a href="{{url('estatuto_coop/?cnpj='.$coop->cnpj)}}" type="button" class="button btn btn-secondary btn-xs">E</a>
+                                        <a href="{{url('df_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs">DF</a>
                                         <a href="{{url('upload_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs"><span class="glyphicon glyphicon-upload"></span></a>
                                         <a href="{{url('editar_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs"><span class="glyphicon glyphicon-edit"></span></a>
                                       </div>

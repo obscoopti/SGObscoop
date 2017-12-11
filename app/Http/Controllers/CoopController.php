@@ -42,10 +42,8 @@ class CoopController extends Controller
     }
 
     public function lista_coop(){
-      $lista_coop = DB::table('instituicao')
-    	// $lista_coop = DB::table('coop.instituicao')
+    	$lista_coop = DB::table('coop.instituicao')
     		->select('id','cnpj','nome', 'tipo')
-    		// ->take(5)
     		->get();
     	return view('lista_coop')
     		->with('lista_coop', $lista_coop)
@@ -53,8 +51,7 @@ class CoopController extends Controller
     }
 
     public function upload_coop(Request $request){
-        $coop = DB::table('instituicao')
-        /*$coop = DB::table('coop.instituicao')*/
+      $coop = DB::table('coop.instituicao')
                 ->where('id','=', $request->input('id'))
                 ->first();
         return view('upload_coop')
@@ -75,9 +72,7 @@ class CoopController extends Controller
     }
 
     public function fonte_coop(Request $request){
-    		// return $request->input('id');
-    		$coop = DB::table('instituicao')
-        /*$coop = DB::table('coop.instituicao')*/
+    		$coop = DB::table('coop.instituicao')
     			->where('id','=', $request->input('id'))
     			->first();
         $fontes = DB::table('arquivo_coop')
@@ -91,13 +86,10 @@ class CoopController extends Controller
               "select distinct ano::integer from arquivo_coop where instituicao_id = {$coop->id}")
           );
 
-          // return var_dump($anos);
-
-        // $balancetes 
         $anos['balancetes']=DB::select(
           DB::raw(
             "select distinct substring(data_base::text from 1 for 4 )::integer as ano from coop.balancetes
-            where cnpj = '00000000' and
+            where cnpj = '{$coop->cnpj}' and
             data_base::text like '%12'
             order by substring(data_base::text from 1 for 4 )::integer asc" 
           )
@@ -139,13 +131,20 @@ class CoopController extends Controller
         	->with('tab_dados',$tab_dados);
     }
 
+    public function df_coop(Request $request){
+      $coop = DB::table('coop.instituicao')
+                ->where('id','=', $request->input('id'))
+                ->first();
+        return view('df_coop')
+            ->with("coop", $coop);
+    }
+
     public function nova_coop(Request $request){
     	return view('nova_coop');
     }
 
     public function editar_coop(Request $request){
-      $coop = DB::table('instituicao')
-      // $coop = DB::table('coop.instituicao')
+      $coop = DB::table('coop.instituicao')
                 ->where('id','=', $request->input('id'))
                 ->first();
       $request->session()->flash('id_session',$coop->id);

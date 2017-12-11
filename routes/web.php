@@ -27,6 +27,7 @@ Route::post('/nova_coop', 'CoopController@nova_submit_coop');
 Route::get('/estatuto_coop', 'CoopController@estatuto_coop');
 Route::get('/editar_coop', 'CoopController@editar_coop');
 Route::post('/editar_coop', 'CoopController@editar_submit_coop');
+Route::get('/df_coop', 'CoopController@df_coop');
 
 Auth::routes();
 
