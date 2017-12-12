@@ -17,6 +17,6 @@ class Instituicao extends Model
     'complemento', 'bairro', 'cep',
     'municipio', 'uf', 'tipo_cooperativa',
     'classe_cooperativa', 'site', 'categ_coop_sing',
-    'filiacao', 'lat', 'long',
+    'filiacao', 'lat', 'long','cnpj_completo',
   ];
 }

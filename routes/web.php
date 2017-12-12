@@ -28,6 +28,7 @@ Route::get('/estatuto_coop', 'CoopController@estatuto_coop');
 Route::get('/editar_coop', 'CoopController@editar_coop');
 Route::post('/editar_coop', 'CoopController@editar_submit_coop');
 Route::get('/df_coop', 'CoopController@df_coop');
+Route::get('/completa_cnpj', 'CoopController@completa_cnpj_banco');
 
 Auth::routes();
 

@@ -94,6 +94,7 @@ class CoopController extends Controller
             order by substring(data_base::text from 1 for 4 )::integer asc" 
           )
         );
+        // return var_dump($anos);   
 
         //Faz o merge dos anos e tira repeticao
         foreach($anos as $anos_aux)
@@ -265,4 +266,171 @@ class CoopController extends Controller
       return redirect()->back()->with('status', 'Upload feito com sucesso.');
 
    }
+
+
+  public function completa_cnpj_banco (){
+    // $array_coop =  Instituicao::all();
+    $array_coop =  DB::table('coop.instituicao')
+                ->select('id','cnpj','cnpj_completo')
+                ->orderby('id','asc')
+                ->where('id','>',3014)
+                ->get();
+
+
+      foreach($array_coop as $coop){
+        $coop->cnpj_completo = $this->completa_cnpj($coop->cnpj);
+        var_dump( $coop);
+        DB::table('coop.instituicao')
+          ->where('id',$coop->id)
+          ->update(['cnpj_completo' => $coop->cnpj_completo]);
+        // break;
+      }
+
+
+      // foreach($array_coop as $coop){
+      //   $coop->cnpj_completo = $this->completa_cnpj ( $coop->cnpj );
+      //   var_dump($coop);
+      //   $coop->save();
+      //   break;
+      // }
+  }
+
+  /**
+   * Completa CNPJ
+   *
+   * Retorna recebe um cnpj e completa calculando o DV
+   * @param string $cnpj 
+   * @return string $cnpj
+   *
+   */
+  function completa_cnpj ( $cnpj ) {
+      // Deixa o CNPJ com apenas números
+      $cnpj = preg_replace( '/[^0-9]/', '', $cnpj );
+      
+      // Garante que o CNPJ é uma string
+      $cnpj = (string)$cnpj;
+      
+      // O valor original
+      $cnpj_original = $cnpj;
+      
+      $aux_cnpj = explode('0001',$cnpj);
+
+      if(count($aux_cnpj) ==  1){// Se nao existe 0001 no cnpj
+        $cnpj .= '0001';
+        $max_len = 12;
+        $cnpj_len = strlen($cnpj);
+        $cnpj = $this->completa_zeros_esquerda($cnpj, $max_len, $cnpj_len);
+
+      }elseif(count($aux_cnpj) ==  2 && strlen($aux_cnpj[0])>4){
+        $max_len = 14;
+        $cnpj_len = strlen($cnpj);
+        $cnpj = $this->completa_zeros_esquerda($cnpj, $max_len, $cnpj_len);
+
+        return $cnpj;
+      }else{
+        $cnpj .= '0001';
+        $max_len = 12;
+        $cnpj_len = strlen($cnpj);
+        $cnpj = $this->completa_zeros_esquerda($cnpj, $max_len, $cnpj_len);     
+        
+      }
+
+      // Captura os primeiros 12 números do CNPJ
+      $primeiros_numeros_cnpj = substr( $cnpj, 0, 12 );
+      
+      /**
+       * Multiplicação do CNPJ
+       *
+       * @param string $cnpj Os digitos do CNPJ
+       * @param int $posicoes A posição que vai iniciar a regressão
+       * @return int O
+       *
+       */
+      // if ( ! function_exists('multiplica_cnpj') ) {
+      //     function multiplica_cnpj( $cnpj, $posicao = 5 ) {
+      //         // Variável para o cálculo
+      //         $calculo = 0;
+              
+      //         // Laço para percorrer os item do cnpj
+      //         for ( $i = 0; $i < strlen( $cnpj ); $i++ ) {
+      //             // Cálculo mais posição do CNPJ * a posição
+      //             $calculo = $calculo + ( $cnpj[$i] * $posicao );
+                  
+      //             // Decrementa a posição a cada volta do laço
+      //             $posicao--;
+                  
+      //             // Se a posição for menor que 2, ela se torna 9
+      //             if ( $posicao < 2 ) {
+      //                 $posicao = 9;
+      //             }
+      //         }
+      //         // Retorna o cálculo
+      //         return $calculo;
+      //     }
+      // }
+      
+      // Faz o primeiro cálculo
+      $primeiro_calculo = $this->multiplica_cnpj( $primeiros_numeros_cnpj );
+      
+      // Se o resto da divisão entre o primeiro cálculo e 11 for menor que 2, o primeiro
+      // Dígito é zero (0), caso contrário é 11 - o resto da divisão entre o cálculo e 11
+      $primeiro_digito = ( $primeiro_calculo % 11 ) < 2 ? 0 :  11 - ( $primeiro_calculo % 11 );
+      
+      // Concatena o primeiro dígito nos 12 primeiros números do CNPJ
+      // Agora temos 13 números aqui
+      $primeiros_numeros_cnpj .= $primeiro_digito;
+   
+      // O segundo cálculo é a mesma coisa do primeiro, porém, começa na posição 6
+      $segundo_calculo = $this->multiplica_cnpj( $primeiros_numeros_cnpj, 6 );
+      $segundo_digito = ( $segundo_calculo % 11 ) < 2 ? 0 :  11 - ( $segundo_calculo % 11 );
+      
+      // Concatena o segundo dígito ao CNPJ
+      $cnpj = $primeiros_numeros_cnpj . $segundo_digito;
+      
+      return $cnpj;
+  }
+
+
+  /**
+   * Multiplicação do CNPJ
+   *
+   * @param string $cnpj Os digitos do CNPJ
+   * @param int $posicoes A posição que vai iniciar a regressão
+   * @return int O
+   *
+   */
+  function multiplica_cnpj( $cnpj, $posicao = 5 ) {
+    // Variável para o cálculo
+    $calculo = 0;
+    
+    // Laço para percorrer os item do cnpj
+    for ( $i = 0; $i < strlen( $cnpj ); $i++ ) {
+        // Cálculo mais posição do CNPJ * a posição
+        $calculo = $calculo + ( $cnpj[$i] * $posicao );
+        
+        // Decrementa a posição a cada volta do laço
+        $posicao--;
+        
+        // Se a posição for menor que 2, ela se torna 9
+        if ( $posicao < 2 ) {
+            $posicao = 9;
+        }
+    }
+    // Retorna o cálculo
+    return $calculo;
+}
+
+  /*
+  * funcao auxiliar que insere zeros a esquerda do cnpj
+  * sting cnpj a ser completada
+  * max_len representa o tamanho maximo do cnpj
+  * cnpj_len representa o tamnha do cnpj
+  * retorna o cnpj com zeros a esquerda
+  */
+  function completa_zeros_esquerda($cnpj, $max_len, $cnpj_len){
+    for($i = 0; $i< $max_len - $cnpj_len; $i++)
+      $cnpj = '0'.$cnpj;  
+    
+    return $cnpj;
+  }
 }
