@@ -115,3 +115,21 @@ function formataCampo(campo, Mascara, evento) {
 		return true; 	
 	}
 }
+
+$(document).ready(function(){
+    $('#df_1').click(function(){
+        $('.grupos').hide();
+        $('#div_df_1').show();
+
+    });
+    $('#df_2').click(function(){
+        $('.grupos').hide();
+        $('#div_df_2').show();
+
+    });
+    $('#df_3').click(function(){
+        $('.grupos').hide();
+        $('#div_df_3').show();
+
+    });
+});
