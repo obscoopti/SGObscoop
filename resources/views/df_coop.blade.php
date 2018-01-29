@@ -27,7 +27,10 @@
                     </div>
                 </div>
 
-                <div class="panel-body">                                 
+                <div class="panel-body">   
+                @foreach($coop->cnpj_completo as $cnpjs)
+                    
+                @endforeach                              
                 </div>
             </div>
         </div>

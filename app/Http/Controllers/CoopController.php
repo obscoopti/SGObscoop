@@ -103,6 +103,7 @@ class CoopController extends Controller
             order by substring(data_base::text from 1 for 4 )::integer asc" 
           )
         );
+        return var_dump($coop);
         // return var_dump($anos);   
 
         //Faz o merge dos anos e tira repeticao
