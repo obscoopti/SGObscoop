@@ -48,14 +48,22 @@
                                         'Cooperativa de Crédito' => 'Cooperativa de Crédito',
                                         )) }}
                           </td>
-                        </tr>
-                        <tr>
                           <td>
                             <div class="col-md-6">
                               Nome Cooperativa:
                             </div>
                             <div class="col-md-6"> 
                               {{ Form::text('nome_coop') }}
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>
+                            <div class="col-md-6">
+                              CNPJ Cooperativa Abreviado:
+                            </div>
+                            <div class="col-md-6"> 
+                              {{ Form::text('cnpj_coop', '', array('placeholder'=>'Ex: 12345')) }}
                             </div>
                           </td>
                           <td>
@@ -70,10 +78,10 @@
                         <tr>
                           <td>
                             <div class="col-md-6">
-                              CNPJ Cooperativa: 
+                              CNPJ Cooperativa Completo: 
                             </div>
                             <div class="col-md-6">
-                              {{ Form::text('cnpj_coop', '', array('onKeypress'=>'MascaraCNPJ(this)', 'placeholder'=>'00.000.000/0000-00')) }}
+                              {{ Form::text('cnpj_coop_compl', '', array('onKeypress'=>'MascaraCNPJ(this)', 'placeholder'=>'00.000.000/0000-00')) }}
                             </div>
                           </td>
                           <td>

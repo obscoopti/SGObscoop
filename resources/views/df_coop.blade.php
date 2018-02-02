@@ -21,16 +21,16 @@
                     <div align="right" style="float:right;margin-top:-22px;">
                         <fonte style="font-family:verdana"> 
                             <strong>
-                                CNPJ {{$coop->cnpj}}
+                                CNPJ {{$coop->cnpj_completo}}
                             </strong>
                         </fonte>
                     </div>
                 </div>
 
                 <div class="panel-body">   
-                @foreach($coop->cnpj_completo as $cnpjs)
+                {{-- @foreach($coop->cnpj_completo as $cnpjs) --}}
                     
-                @endforeach                              
+                {{-- @endforeach                               --}}
                 </div>
             </div>
         </div>

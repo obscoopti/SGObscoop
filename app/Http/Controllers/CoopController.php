@@ -43,7 +43,7 @@ class CoopController extends Controller
 
     public function lista_coop(){
     	$lista_coop = DB::table('coop.instituicao')
-    		->select('id','cnpj','nome', 'tipo')
+    		->select('id','cnpj','nome', 'tipo', 'cnpj_completo')
         ->where('tipo','=','Cooperativa de Crédito')
         ->orwhere('tipo','=','Cooperativa de Agro')
     		->get();
@@ -167,16 +167,17 @@ class CoopController extends Controller
     public function nova_submit_coop(Request $request){
        $this->validate($request,[
           'nome_coop'=>'required',
-          'cnpj_coop'=>'required|max:18',
+          'cnpj_coop_compl'=>'required|max:18',
           'uf_coop'=>'max:2',
           'telefone_coop'=>'max:14',
           'fax_coop'=>'max:14',
           'cep_coop'=>'max:9',
           'seg_coop'=>'required',
+          'cnpj_coop'=>'required',
       ]);
-       $cnpj = str_replace (  array('.', '-', '/') ,  '' ,  $request->cnpj_coop );
+       $cnpj = str_replace (  array('.', '-', '/') ,  '' ,  $request->cnpj_coop_compl );
       Instituicao::create([
-        'cnpj'=>$cnpj, 'telefone'=>$request->telefone_coop,
+        'cnpj'=>$cnpj_coop, 'telefone'=>$request->telefone_coop,
         'fax'=>$request->fax_coop, 'natureza_juridica'=>$request->natureza_coop,
         'tipo'=>$request->seg_coop, 'situacao'=>$request->sit_coop,
         'auditor'=>$request->auditor_coop, 'endereco_eletronico'=>$request->email_coop,
@@ -187,7 +188,7 @@ class CoopController extends Controller
         'tipo_cooperativa'=>$request->tipo_coope, 'classe_cooperativa'=>$request->class_coop,
         'site'=>$request->site_coop, 'categ_coop_sing'=>$request->cat_coop,
         'filiacao'=>$request->filiacao_coop, 'lat'=>$request->lat_coop,
-        'long'=>$request->long_coop,
+        'long'=>$request->long_coop, 'cnpj_completo'=>$cnpj,
       ]);
       return redirect('lista_coop')->with('status', 'Inserido com sucesso.');
     }
@@ -197,18 +198,19 @@ class CoopController extends Controller
 
        $this->validate($request,[
           'nome_coop'=>'required',
-          'cnpj_coop'=>'required|max:18',
+          'cnpj_coop_compl'=>'required|max:18',
           'uf_coop'=>'max:2',
           'telefone_coop'=>'max:14',
           'fax_coop'=>'max:14',
           'cep_coop'=>'max:9',
           'seg_coop'=>'required',
+          'cnpj_coop'=>'required',
       ]);
       $coop = Instituicao::find($id);
 
-      $cnpj = str_replace (  array('.', '-', '/') ,  '' ,  $request->cnpj_coop );
+      $cnpj = str_replace (  array('.', '-', '/') ,  '' ,  $request->cnpj_coop_compl );
       $coop->fill([
-        'cnpj'=>$cnpj, 'telefone'=>$request->telefone_coop,
+        'cnpj'=>$cnpj_coop, 'telefone'=>$request->telefone_coop,
         'fax'=>$request->fax_coop, 'natureza_juridica'=>$request->natureza_coop,
         'tipo'=>$request->seg_coop, 'situacao'=>$request->sit_coop,
         'auditor'=>$request->auditor_coop, 'endereco_eletronico'=>$request->email_coop,
@@ -219,7 +221,7 @@ class CoopController extends Controller
         'tipo_cooperativa'=>$request->tipo_coope, 'classe_cooperativa'=>$request->class_coop,
         'site'=>$request->site_coop, 'categ_coop_sing'=>$request->cat_coop,
         'filiacao'=>$request->filiacao_coop, 'lat'=>$request->lat_coop,
-        'long'=>$request->long_coop,
+        'long'=>$request->long_coop, 'cnpj_completo'=>$cnpj,
       ]);
       $coop->save();
       return redirect()->back()->with('status', 'Editado com sucesso.');
