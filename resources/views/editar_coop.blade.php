@@ -60,7 +60,7 @@
                         <tr>
                           <td>
                             <div class="col-md-6">
-                              CNPJ Coperativa Abreviado:
+                              CNPJ Coperativa Completo:
                             </div>
                             <div class="col-md-6"> 
                               {{ Form::text('nome_coop_compl', $coop->cnpj_completo) }}
@@ -78,7 +78,7 @@
                         <tr>
                           <td>
                             <div class="col-md-6">
-                              CNPJ Cooperativa: 
+                              CNPJ Cooperativa Abreviado: 
                             </div>
                             <div class="col-md-6">
                               {{ Form::text('cnpj_coop', $coop->cnpj, array('onKeypress'=>'MascaraCNPJ(this)', 'placeholder'=>'00.000.000/0000-00')) }}
