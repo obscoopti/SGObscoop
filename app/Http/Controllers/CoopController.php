@@ -98,13 +98,20 @@ class CoopController extends Controller
         $anos['balancetes']=DB::select(
           DB::raw(
             "select distinct substring(data_base::text from 1 for 4 )::integer as ano from coop.balancetes
-            where cnpj = '{$coop->cnpj}' and
+            where cnpj_sgo = '{$coop->cnpj_completo}' and
             data_base::text like '%12'
             order by substring(data_base::text from 1 for 4 )::integer asc" 
           )
         );
-        return var_dump($coop);
-        // return var_dump($anos);   
+         $anos['estatutos']=DB::select(
+          DB::raw(
+            "select distinct ano_estatuto::integer as ano from coop.estatuto
+            where cnpj_estatuto_completo = '{$coop->cnpj_completo}' 
+            order by ano_estatuto::integer asc" 
+          )
+        );
+        // return var_dump($coop);
+        //  return var_dump($anos);   
 
         //Faz o merge dos anos e tira repeticao
         foreach($anos as $anos_aux)
@@ -112,12 +119,14 @@ class CoopController extends Controller
             $anos_f[(int)$ano->ano] = (int)$ano->ano; 
 
         foreach($anos['balancetes'] as $balancete_aux)
-          $balancetes[$balancete_aux->ano] = $balancete_aux->ano; 
-            
-        sort($anos_f);
-        // var_dump($anos_f);
-        // return;
+          $balancetes[$balancete_aux->ano] = $balancete_aux->ano;
+
+        foreach($anos['estatutos'] as $estatuto_aux)
+          $estatutos[$estatuto_aux->ano] = $estatuto_aux->ano;  
           
+        // return var_dump($anos);  
+        sort($anos_f);
+        // return var_dump($anos_f);  
         $tab_dados = [];
         foreach ($anos_f as $ano) { // varia os anos encontrados 
           $array_tFonte =  $this->array_tFonte; // Zera o vetor com os tipos do ano
@@ -129,12 +138,15 @@ class CoopController extends Controller
               if(in_array($ano, $balancetes) && $kFonte == 'Balancete'){
                 $array_tFonte[$kFonte] = 1; 
               }
+              if(in_array($ano, $estatutos) && $kFonte == 'Estatuto'){
+                $array_tFonte[$kFonte] = 1; 
+              }
             }
           }
           $tab_dados[(int)$ano] = [];
           $tab_dados[(int)$ano] = $array_tFonte;
         }
-          // var_dump($tab_dados);
+          // return var_dump($tab_dados);
           // return;
 
         return view('fonte_coop')
