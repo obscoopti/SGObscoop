@@ -159,7 +159,7 @@ class CoopController extends Controller
                 ->where('id','=', $request->input('id'))
                 ->first();
         return view('df_coop')
-            ->with("coop", $coop);
+            ->with('coop', $coop);
     }
 
     public function nova_coop(Request $request){
@@ -205,6 +205,21 @@ class CoopController extends Controller
       return redirect('lista_coop')->with('status', 'Inserido com sucesso.');
     }
 
+    public function download_coop(Request $request){
+      $coop = DB::table('arquivo_coop')
+                ->where('instituicao_id','=', $request->input('id'))
+                ->orderby('tipo','asc')
+                ->get();
+     
+      $coopcnpj = DB::table('coop.instituicao')
+                ->where('id','=', $request->input('id'))
+                ->first();
+       // return var_dump($coop);
+        return view('download_coop')
+            ->with('coop', $coop)
+            ->with('coopcnpj', $coopcnpj);
+    }
+
     public function editar_submit_coop(Request $request){
       $id = $request->session()->get('id_session');
 
@@ -238,6 +253,19 @@ class CoopController extends Controller
       $coop->save();
       return redirect()->back()->with('status', 'Editado com sucesso.');
     }
+
+    public function download_submit(Request $request){
+    
+      $myFile = public_path($request->arq_tipo);
+      return var_dump($myFile);
+      $headers = ['Content-Type: application/pdf'];
+      $newName = 'itsolutionstuff-pdf-file-'.time().'.pdf';
+
+
+      return response()->download($myFile, $newName, $headers);
+
+    }
+
     public function showUploadFile(Request $request) {
       $this->validate($request,[
         'arq'=>'required',
@@ -248,7 +276,7 @@ class CoopController extends Controller
         ]
       );
       // return $request->all();
-      $file = $request->file('arq') ;
+      $file = $request->file('arq');
    
       //Display File Name
       echo 'File Name: '.$file->getClientOriginalName() ;

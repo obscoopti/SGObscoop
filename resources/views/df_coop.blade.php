@@ -21,7 +21,7 @@
                     <div align="right" style="float:right;margin-top:-22px;">
                         <fonte style="font-family:verdana"> 
                             <strong>
-                                CNPJ {{$coop->cnpj_completo}}
+                                CNPJ {{$coop}}
                             </strong>
                         </fonte>
                     </div>

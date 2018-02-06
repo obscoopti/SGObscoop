@@ -16,7 +16,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div>
-                         Upload Obscoop
+                         Upload Arquivos
                     </div>
                     <div align="right" style="float:right;margin-top:-22px;">
                         <fonte style="font-family:verdana"> 

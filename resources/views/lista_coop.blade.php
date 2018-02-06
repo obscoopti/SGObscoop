@@ -55,6 +55,7 @@
                                         <a href="{{url('estatuto_coop/?cnpj='.$coop->cnpj_completo)}}" type="button" class="button btn btn-secondary btn-xs">E</a>
                                         <a href="{{url('df_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs">DF</a>
                                         <a href="{{url('upload_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs"><span class="glyphicon glyphicon-upload"></span></a>
+                                        <a href="{{url('download_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs"><span class="glyphicon glyphicon-download"></span></a>
                                         <a href="{{url('editar_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs"><span class="glyphicon glyphicon-edit"></span></a>
                                       </div>
                                     </td>
