@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Response;
 
 class CoopController extends Controller
 {
@@ -255,15 +256,9 @@ class CoopController extends Controller
     }
 
     public function download_submit(Request $request){
-    
-      $myFile = public_path($request->arq_tipo);
-      return var_dump($myFile);
-      $headers = ['Content-Type: application/pdf'];
-      $newName = 'itsolutionstuff-pdf-file-'.time().'.pdf';
-
-
-      return response()->download($myFile, $newName, $headers);
-
+      $myFile = public_path("uploads/".$request->arq_tipo."/".$request->arq_nome);
+      // return var_dump($myFile);
+      return response()->download($myFile);
     }
 
     public function showUploadFile(Request $request) {

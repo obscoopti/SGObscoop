@@ -31,7 +31,7 @@ Route::get('/df_coop', 'CoopController@df_coop');
 Route::get('/cadastro_df', 'CoopController@cadastro_df');
 Route::post('/df_submit', 'CoopController@df_submit');
 Route::get('/download_coop', 'CoopController@download_coop');
-Route::get('/download_coop','CoopController@download_submit');
+Route::get('/download_submit','CoopController@download_submit');
 
 Auth::routes();
 

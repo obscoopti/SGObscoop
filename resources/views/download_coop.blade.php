@@ -38,7 +38,7 @@
                             <th>Nome Arquivo</th>
                             <th>Tipo</th>
                             <th>Ano</th>
-                            <th>Atualizado</th>
+                            <th>Data</th>
                             <th>Action</th>
                         </thead>    
                         <tbody>
@@ -49,30 +49,17 @@
                                 <td>{{$coops->ano}}</td>
                                 <td>{{$coops->updated_at}}</td>
                                 <td>
-                                    {{Form::open(array('url' => '/download_coop','files'=>'true') ) }}
+                                    {{Form::open(array('action' => 'CoopController@download_submit', 'method' => 'get') ) }}
                                     {{Form::hidden('coop_id',$coopcnpj->id) }}
                                     {{Form::hidden('arq_tipo',$coops->tipo) }}
                                     {{Form::hidden('arq_nome',$coops->nome) }}
                                     {{Form::submit('Download') }}
-                                    {{Form::close() }}
-
-                                  {{--   <form id="carrega_arquivo" method="get" action="{{route('download_coop')}}" target="_blank">
-                                    <input type="hidden" id="exporta_pdf" name="exporta_pdf" value="{{$versao->id}}" />
-                                    <input type="hidden" id="data_implat" name="data_implat" value="{{$versao->data_inicial}}" />
-                                    <input type="hidden" id="tipo" name="tipo" value="cli_" />
-                                    <input type="hidden" id="completa" name="completa" value="{{$versao->completa}}" />
-                                    <input type="hidden" id="onload_click" name="onload_click" value="1" />
-                                    <input type="hidden" id="incompleta" name="incompleta" value="{{$incompleta}}" />
-                                    <button id="button_exportar" class="btn btn-default btn-sm botaopequeno" type="submit"><i class="fa fa-file-pdf-o iconbotaopequeno" ></i> Exportar</button>
-                                    </form> --}}
-
+                                    {{Form::close() }}                                   
                                 </td>
                             </tr>
                             @endforeach
                         </tbody>                    
-                    </table>
-                    
-                                                  
+                    </table>                             
                 </div>
             </div>
         </div>
