@@ -81,6 +81,37 @@ class CoopController extends Controller
             ->with("cnpj", $request->cnpj);
     }
 
+     public function df_coop(Request $request){
+      $coop = DB::table('coop.instituicao')
+                ->where('id','=', $request->input('id'))
+                ->first();
+      if($coop->tipo == 'Cooperativa de Crédito'){
+        $dados = DB::select(
+          DB::raw(
+            "select distinct substring(data_base::text from 1 for 4 )::integer as ano from coop.balancetes
+            where cnpj_sgo = '{$coop->cnpj_completo}' and
+            data_base::text like '%12'
+            order by substring(data_base::text from 1 for 4 )::integer asc" 
+          )
+        );
+        // return var_dump($dados);
+      }
+      else{
+        $dados = DB::select(
+          DB::raw(
+            "select distinct ano from coop.demonstrativo_fin_agro
+            where cnpj_sgo = '{$coop->cnpj_completo}'
+            order by ano asc" 
+          )
+        );
+         // return var_dump($dados);
+      }
+      // return var_dump($coop);
+        return view('df_coop')
+            ->with('coop', $coop)
+            ->with('dados', $dados);
+    }
+
     public function fonte_coop(Request $request){
     		$coop = DB::table('coop.instituicao')
     			->where('id','=', $request->input('id'))
@@ -153,14 +184,6 @@ class CoopController extends Controller
         return view('fonte_coop')
           ->with('coop',$coop)
         	->with('tab_dados',$tab_dados);
-    }
-
-    public function df_coop(Request $request){
-      $coop = DB::table('coop.instituicao')
-                ->where('id','=', $request->input('id'))
-                ->first();
-        return view('df_coop')
-            ->with('coop', $coop);
     }
 
     public function nova_coop(Request $request){
