@@ -122,7 +122,10 @@ class CoopController extends Controller
           ->orderby('ano','asc')
           ->get();
 
-          $anos['anos'] = DB::select(
+        if ($coop->tipo == 'Cooperativa de Agro') {
+          return view('home');
+        }
+        $anos['anos'] = DB::select(
             DB::raw(
               "select distinct ano::integer from arquivo_coop where instituicao_id = {$coop->id}")
           );
@@ -157,29 +160,31 @@ class CoopController extends Controller
           $estatutos[$estatuto_aux->ano] = $estatuto_aux->ano;  
           
         // return var_dump($anos);  
-        sort($anos_f);
-        // return var_dump($anos_f);  
-        $tab_dados = [];
-        foreach ($anos_f as $ano) { // varia os anos encontrados 
-          $array_tFonte =  $this->array_tFonte; // Zera o vetor com os tipos do ano
-          foreach($array_tFonte as $kFonte=>$vFonte){ // varia os tipos para encontrar ocorrencia
-            foreach ($fontes as $fonte) { // varias as fontes vindas do bd e preenche ocorrencia
-              if($fonte->tipo == $kFonte && $fonte->ano == $ano){
-                $array_tFonte[$kFonte] = 1; 
-              }
-              if(in_array($ano, $balancetes) && $kFonte == 'Balancete'){
-                $array_tFonte[$kFonte] = 1; 
-              }
-              if(in_array($ano, $estatutos) && $kFonte == 'Estatuto'){
-                $array_tFonte[$kFonte] = 1; 
+        if ($coop->tipo == 'Cooperativa de Crédito') {
+          sort($anos_f);
+          // return var_dump($anos_f);  
+          $tab_dados = [];
+          foreach ($anos_f as $ano) { // varia os anos encontrados 
+            $array_tFonte =  $this->array_tFonte; // Zera o vetor com os tipos do ano
+            foreach($array_tFonte as $kFonte=>$vFonte){ // varia os tipos para encontrar ocorrencia
+              foreach ($fontes as $fonte) { // varias as fontes vindas do bd e preenche ocorrencia
+                if($fonte->tipo == $kFonte && $fonte->ano == $ano){
+                  $array_tFonte[$kFonte] = 1; 
+                }
+                if(in_array($ano, $balancetes) && $kFonte == 'Balancete'){
+                  $array_tFonte[$kFonte] = 1; 
+                }
+                if(in_array($ano, $estatutos) && $kFonte == 'Estatuto'){
+                  $array_tFonte[$kFonte] = 1; 
+                }
               }
             }
+            $tab_dados[(int)$ano] = [];
+            $tab_dados[(int)$ano] = $array_tFonte;
           }
-          $tab_dados[(int)$ano] = [];
-          $tab_dados[(int)$ano] = $array_tFonte;
-        }
-          // return var_dump($tab_dados);
-          // return;
+        }  
+        // return var_dump($tab_dados);
+        // return;
 
         return view('fonte_coop')
           ->with('coop',$coop)

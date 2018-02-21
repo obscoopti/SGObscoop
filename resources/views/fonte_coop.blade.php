@@ -7,12 +7,12 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div>
-                         Fonte de dados
+                         Fonte de Dados
                     </div>
                     <div align="right" style="float:right;margin-top:-22px;">
                         <fonte style="font-family:verdana"> 
                             <strong>
-                                CNPJ {{$coop->cnpj}}
+                                CNPJ {{$coop->cnpj_completo}}
                             </strong>
                         </fonte>
                     </div>
