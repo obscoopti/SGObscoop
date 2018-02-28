@@ -48,22 +48,14 @@
                                         'Cooperativa de Crédito' => 'Cooperativa de Crédito',
                                         ), $coop->tipo) }}
                           </td>
-                           <td>
+                        </tr>
+                        <tr>
+                          <td>
                             <div class="col-md-6">
                               Nome Cooperativa:
                             </div>
                             <div class="col-md-6"> 
                               {{ Form::text('nome_coop', $coop->nome) }}
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>
-                            <div class="col-md-6">
-                              CNPJ Coperativa Completo:
-                            </div>
-                            <div class="col-md-6"> 
-                              {{ Form::text('nome_coop_compl', $coop->cnpj_completo) }}
                             </div>
                           </td>
                           <td>
@@ -256,7 +248,7 @@
                           </td>
                         </tr>
                       </table>
-                      {{Form::submit('Editar')}}
+                      {{Form::submit('Salvar')}}
                       {{ Form::close() }}
                     </div>
                 </div>

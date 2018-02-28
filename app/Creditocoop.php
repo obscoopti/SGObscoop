@@ -4,10 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Instituicao extends Model
+class Creditocoop extends Model
 {
-	protected $table = 'coop.instituicao';
-	public $timestamps = false;
+    protected $table = 'coop.instituicao_credito';
+    public $timestamps = false;
 
   protected $fillable = [
     'cnpj', 'telefone', 'fax',
