@@ -127,6 +127,7 @@ class CoopController extends Controller
         if ($coop->tipo == 'Cooperativa de Agro') {
           return view('home');
         }
+        
         $anos['anos'] = DB::select(
             DB::raw(
               "select distinct ano::integer from arquivo_coop where instituicao_id = {$coop->id}")
@@ -240,6 +241,10 @@ class CoopController extends Controller
       $cnpjcompleto = $this->completa_cnpj($request->cnpj_coop);
 
       // return var_dump($cnpjcompleto);
+
+      // $geocod = $request->end_coop.",".$request->compl_coop.",".$cidadecoop;
+      // $geocode = file_get_contents("https://\maps.google.com/maps/api/geocode/json?key=AIzaSyBt7J4ot2wu_ztA8-aZtWH3ZFqX_0Gpbbk&address=".$geocod.'&sensor=false');
+      // return var_dump($geocode);
 
        if ($request->seg_coop == 'Cooperativa de Agro'){          
         Agrocoop::create([
