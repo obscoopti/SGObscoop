@@ -198,6 +198,10 @@ class CoopController extends Controller
     	return view('nova_coop');
     }
 
+     public function cadastro_coop(Request $request){
+      return view('cadastro_coop');
+    }
+
     public function editar_coop(Request $request){
       $coop = DB::table('coop.instituicao')
                 ->where('id','=', $request->input('id'))

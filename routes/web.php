@@ -28,10 +28,11 @@ Route::get('/estatuto_coop', 'CoopController@estatuto_coop');
 Route::get('/editar_coop', 'CoopController@editar_coop');
 Route::post('/editar_coop', 'CoopController@editar_submit_coop');
 Route::get('/df_coop', 'CoopController@df_coop');
-Route::get('/cadastro_df', 'CoopController@cadastro_df');
-Route::post('/df_submit', 'CoopController@df_submit');
 Route::get('/download_coop', 'CoopController@download_coop');
 Route::get('/download_submit','CoopController@download_submit');
+Route::get('/cadastro_coop', 'CoopController@cadastro_coop');
+Route::get('/cadastro_df', 'CoopController@cadastro_df');
+Route::post('/df_submit', 'CoopController@df_submit');
 
 Auth::routes();
 
