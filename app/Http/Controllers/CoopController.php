@@ -33,61 +33,62 @@ class CoopController extends Controller
       'DMPL'=>'DMPL'
     ];
 
-
+// ---------------------------------------------------------------------------------------------------------------------------------
      /**
      * Create a new controller instance.
      *
      * @return void
-     */
+     */     
     public function __construct()
     {
         $this->middleware('auth');
     }
-
-    public function lista_coop(){
+// ---------------------------------------------------------------------------------------------------------------------------------
+    public function lista_coop()
+    {
     	$lista_coop = DB::table('coop.instituicao')
     		->select('id','cnpj','nome', 'tipo', 'cnpj_completo')
         ->where('tipo','=','Cooperativa de Crédito')
         ->orwhere('tipo','=','Cooperativa de Agro')
     		->get();
 
-        // $lista_coop = DB::select(
-        //   DB::raw('
-        //     select id, cnpj, nome, tipo from only coop.instituicao_agro
-        //   ')
-        // );
-
     	return view('lista_coop')
-    		->with('lista_coop', $lista_coop)
-    		->render();
+    		      ->with('lista_coop', $lista_coop)
+    		      ->render();
     }
-
-    public function upload_coop(Request $request){
+// ---------------------------------------------------------------------------------------------------------------------------------
+    public function upload_coop(Request $request)
+    {
       $coop = DB::table('coop.instituicao')
                 ->where('id','=', $request->input('id'))
                 ->first();
-        return view('upload_coop')
-            ->with("array_lFonte", $this->array_lFonte)
-            ->with("coop", $coop);
-    }
 
-    public function estatuto_coop(Request $request){
-        $estatutos = DB::table('coop.estatuto')
-                ->select('ano_estatuto', 'estatuto_completo')
-                ->where('cnpj_estatuto','=', $request->input('cnpj'))
-                ->orwhere('cnpj_estatuto_completo','=', $request->input('cnpj'))
-                ->orderby('ano_estatuto','asc')
-                ->get();
-        return view('estatuto_coop')
-            ->with("estatutos", $estatutos)
-            ->with("cnpj", $request->cnpj);
+      return view('upload_coop')
+              ->with("array_lFonte", $this->array_lFonte)
+              ->with("coop", $coop);
     }
+// ---------------------------------------------------------------------------------------------------------------------------------
+    public function estatuto_coop(Request $request)
+    {
+      $estatutos = DB::table('coop.estatuto')
+                    ->select('ano_estatuto', 'estatuto_completo')
+                    ->where('cnpj_estatuto','=', $request->input('cnpj'))
+                    ->orwhere('cnpj_estatuto_completo','=', $request->input('cnpj'))
+                    ->orderby('ano_estatuto','asc')
+                    ->get();
 
-     public function df_coop(Request $request){
+      return view('estatuto_coop')
+              ->with("estatutos", $estatutos)
+              ->with("cnpj", $request->cnpj);
+    }
+// ---------------------------------------------------------------------------------------------------------------------------------
+    public function df_coop(Request $request)
+    {
       $coop = DB::table('coop.instituicao')
                 ->where('id','=', $request->input('id'))
                 ->first();
-      if($coop->tipo == 'Cooperativa de Crédito'){
+      if($coop->tipo == 'Cooperativa de Crédito')
+      {
         $dados = DB::select(
           DB::raw(
             "select distinct substring(data_base::text from 1 for 4 )::integer as ano from coop.balancetes
@@ -96,9 +97,9 @@ class CoopController extends Controller
             order by substring(data_base::text from 1 for 4 )::integer asc" 
           )
         );
-        // return var_dump($dados);
       }
-      else{
+      else
+      {
         $dados = DB::select(
           DB::raw(
             "select distinct ano from coop.demonstrativo_fin_agro
@@ -106,14 +107,12 @@ class CoopController extends Controller
             order by ano asc" 
           )
         );
-         // return var_dump($dados);
       }
-      // return var_dump($coop);
-        return view('df_coop')
-            ->with('coop', $coop)
-            ->with('dados', $dados);
+      return view('df_coop')
+                ->with('coop', $coop)
+                ->with('dados', $dados);
     }
-
+// ---------------------------------------------------------------------------------------------------------------------------------
     public function fonte_coop(Request $request){
     		$coop = DB::table('coop.instituicao')
     			->where('id','=', $request->input('id'))
@@ -148,9 +147,6 @@ class CoopController extends Controller
             order by ano_estatuto::integer asc" 
           )
         );
-        // return var_dump($coop);
-        //  return var_dump($anos);   
-
         //Faz o merge dos anos e tira repeticao
         foreach($anos as $anos_aux)
           foreach ($anos_aux as $ano)
@@ -186,71 +182,221 @@ class CoopController extends Controller
             $tab_dados[(int)$ano] = $array_tFonte;
           }
         }  
-        // return var_dump($tab_dados);
-        // return;
-
         return view('fonte_coop')
           ->with('coop',$coop)
         	->with('tab_dados',$tab_dados);
     }
-
-    public function nova_coop(Request $request){
+// ---------------------------------------------------------------------------------------------------------------------------------
+    public function nova_coop(Request $request)
+    {
     	return view('nova_coop');
     }
-
-     public function cadastro_coop(Request $request){
+// ---------------------------------------------------------------------------------------------------------------------------------
+    public function cadastro_coop(Request $request)
+    {
       return view('cadastro_coop');
     }
+// ---------------------------------------------------------------------------------------------------------------------------------
+    public function cadastro_file(Request $request) 
+    {
+      $this->validate($request,[
+        'arq'=>'required',
+      ]);
+      $file = $request->file('arq');
+      $csv = $this->readCSV($file); 
+      foreach ($csv as $csvs) 
+      {
+        $coope =  preg_split("/;/", $csvs[0]);
+        $coop = DB::table('sgobscoop.instituicao')
+                    ->where('cnpj','=', $coope[0])
+                    ->first();
+        if($coope[0] == ''){
+          return redirect()->back()->with('status', 'Cadastro feito com sucesso.');
+        }
+        if ($coope[1] == 'CREDITO' ) 
+        {
+          if ($coop == null) 
+          {
+            $cnpjcompleto = $this->completa_cnpj($coope[0]);
+            $cidadecoop = $this->acerta_cidade($coope[5]);
+            $ufcoop = strtoupper($coope[4]);
+            $nomecoop = strtoupper($coope[7]);
+            $tel = "(".$coope[12].")".$coope[13];
 
-    public function editar_coop(Request $request){
+            $cidade_cod = DB::table('coop.municipio_uf_ibge')
+                ->where('municipio','=', $cidadecoop)
+                ->where('uf', '=', $ufcoop)
+                ->first();
+              
+            if ($cidade_cod == null) {
+              return var_dump($cidadecoop,$coope,$cnpjcompleto);
+            }
+            $id = DB::table('sgobscoop.instituicao')->insertGetId([
+              'cnpj'=>$coope[0], 'telefone'=>$tel,
+              'fax'=>"", 'natureza_juridica'=>"Sociedade Cooperativa",
+              'tipo'=>"Cooperativa de Crédito", 'situacao'=>"",
+              'auditor'=>"", 'endereco_eletronico'=>$coope[14],
+              'codigo_compensacao'=>"", 'nome'=>$nomecoop,
+              'endereco'=>$coope[8], 'complemento'=>$coope[9],
+              'bairro'=>$coope[10], 'cep'=>$coope[11],
+              'municipio'=>$cidadecoop, 'uf'=>$ufcoop,
+              'tipo_cooperativa'=>"", 'classe_cooperativa'=>$coope[2],
+              'site'=>$coope[15], 'categ_coop_sing'=>$coope[3],
+              'filiacao'=>$coope[6], 'lat'=>"",
+              'long'=>"", 'cnpj_completo'=>$cnpjcompleto,
+              'cod_municipio'=>$cidade_cod->cod_municipio, 'cod_uf'=>$cidade_cod->cod_uf,
+            ]);
+          }
+          else
+          {
+            $cnpjcompleto = $this->completa_cnpj($coope[0]);
+            $cidadecoop = $this->acerta_cidade($coope[5]);
+            $ufcoop = strtoupper($coope[4]);
+            $nomecoop = strtoupper($coope[7]);
+            $tel = "(".$coope[12].")".$coope[13];
+            $cidade_cod = DB::table('coop.municipio_uf_ibge')
+                            ->where('municipio','=', $cidadecoop)
+                            ->where('uf', '=', $ufcoop)
+                            ->first();
+
+            if ($cidade_cod == null) {
+              return var_dump($cidadecoop,$coope,$cnpjcompleto);
+            }
+
+            DB::table('sgobscoop.instituicao')
+              ->where('id', $coop->id)
+              ->update([
+                'cnpj'=>$coope[0], 'telefone'=>$tel,
+                'fax'=>"", 'natureza_juridica'=>"Sociedade Cooperativa",
+                'tipo'=>"Cooperativa de Crédito", 'situacao'=>"",
+                'auditor'=>"", 'endereco_eletronico'=>$coope[14],
+                'codigo_compensacao'=>"", 'nome'=>$nomecoop,
+                'endereco'=>$coope[8], 'complemento'=>$coope[9],
+                'bairro'=>$coope[10], 'cep'=>$coope[11],
+                'municipio'=>$cidadecoop, 'uf'=>$ufcoop,
+                'tipo_cooperativa'=>"", 'classe_cooperativa'=>$coope[2],
+                'site'=>$coope[15], 'categ_coop_sing'=>$coope[3],
+                'filiacao'=>$coope[6], 'lat'=>"",
+                'long'=>"", 'cnpj_completo'=>$cnpjcompleto,
+                'cod_municipio'=>$cidade_cod->cod_municipio, 'cod_uf'=>$cidade_cod->cod_uf
+              ]);
+          }
+        }
+        else
+        {  
+          if ($coop == null) 
+          {
+            $cnpjcompleto = $this->completa_cnpj($coope[0]);
+            $cidadecoop = $this->acerta_cidade($coope[5]);
+            $ufcoop = strtoupper($coope[4]);
+            $nomecoop = strtoupper($coope[7]);
+            $tel = "(".$coope[12].")".$coope[13];
+            $cidade_cod = DB::table('coop.municipio_uf_ibge')
+                            ->where('municipio','=', $cidadecoop)
+                            ->where('uf', '=', $ufcoop)
+                            ->first();
+            if ($cidade_cod == null) {
+              return var_dump($cidadecoop,$coope,$cnpjcompleto);
+            }
+            $id = DB::table('sgobscoop.instituicao')->insertGetId([
+              'cnpj'=>$coope[0], 'telefone'=>$tel,
+              'fax'=>"", 'natureza_juridica'=>"Sociedade Cooperativa",
+              'tipo'=>"Cooperativa de Crédito", 'situacao'=>"",
+              'auditor'=>"", 'endereco_eletronico'=>$coope[14],
+              'codigo_compensacao'=>"", 'nome'=>$nomecoop,
+              'endereco'=>$coope[8], 'complemento'=>$coope[9],
+              'bairro'=>$coope[10], 'cep'=>$coope[11],
+              'municipio'=>$cidadecoop, 'uf'=>$ufcoop,
+              'tipo_cooperativa'=>"", 'classe_cooperativa'=>$coope[2],
+              'site'=>$coope[15], 'categ_coop_sing'=>$coope[3],
+              'filiacao'=>$coope[6], 'lat'=>"",
+              'long'=>"", 'cnpj_completo'=>$cnpjcompleto,
+              'cod_municipio'=>$cidade_cod->cod_municipio, 'cod_uf'=>$cidade_cod->cod_uf
+            ]);
+          }
+          else
+          {
+            $cnpjcompleto = $this->completa_cnpj($coope[0]);
+            $cidadecoop = $this->acerta_cidade($coope[5]);
+            $ufcoop = strtoupper($coope[4]);
+            $nomecoop = strtoupper($coope[7]);
+            $tel = "(".$coope[12].")".$coope[13];
+            $cidade_cod = DB::table('coop.municipio_uf_ibge')
+                            ->where('municipio','=', $cidadecoop)
+                            ->where('uf', '=', $ufcoop)
+                            ->first();
+            if ($cidade_cod == null) {
+             return var_dump($cidadecoop,$coope,$cnpjcompleto);
+            }                
+            DB::table('sgobscoop.instituicao')
+              ->where('id', $coop->id)
+              ->update([
+                'cnpj'=>$coope[0], 'telefone'=>$tel,
+                'fax'=>"", 'natureza_juridica'=>"Sociedade Cooperativa",
+                'tipo'=>"Cooperativa de Crédito", 'situacao'=>"",
+                'auditor'=>"", 'endereco_eletronico'=>$coope[14],
+                'codigo_compensacao'=>"", 'nome'=>$nomecoop,
+                'endereco'=>$coope[8], 'complemento'=>$coope[9],
+                'bairro'=>$coope[10], 'cep'=>$coope[11],
+                'municipio'=>$cidadecoop, 'uf'=>$ufcoop,
+                'tipo_cooperativa'=>"", 'classe_cooperativa'=>$coope[2],
+                'site'=>$coope[15], 'categ_coop_sing'=>$coope[3],
+                'filiacao'=>$coope[6], 'lat'=>"",
+                'long'=>"", 'cnpj_completo'=>$cnpjcompleto,
+                'cod_municipio'=>$cidade_cod->cod_municipio, 'cod_uf'=>$cidade_cod->cod_uf
+              ]);
+          }
+        }
+      }
+      return redirect()->back()->with('status', 'Cadastro feito com sucesso.');
+   }
+// ---------------------------------------------------------------------------------------------------------------------------------
+    function readCSV($csvFile)
+    {
+      $file_handle = fopen($csvFile, 'r');
+      while (!feof($file_handle) ) 
+      {
+        $line_of_text[] = fgetcsv($file_handle, 1024);
+      }
+      fclose($file_handle);
+      return $line_of_text;
+    }
+// ---------------------------------------------------------------------------------------------------------------------------------
+    public function editar_coop(Request $request)
+    {
       $coop = DB::table('coop.instituicao')
                 ->where('id','=', $request->input('id'))
                 ->first();
       $request->session()->flash('id_session',$coop->id);
       return view('editar_coop')
-        ->with('coop', $coop);
-
+              ->with('coop', $coop);
     }
-
-    public function nova_submit_coop(Request $request){
-       $this->validate($request,[
-          'nome_coop'=>'required',
-          'uf_coop'=>'max:2',
-          'telefone_coop'=>'max:14',
-          'fax_coop'=>'max:14',
-          'cep_coop'=>'max:9',
-          'seg_coop'=>'required',
-          'cnpj_coop'=>'required',
+// ---------------------------------------------------------------------------------------------------------------------------------
+    public function nova_submit_coop(Request $request)
+    {
+      $this->validate($request,[
+        'nome_coop'=>'required',
+        'uf_coop'=>'max:2',
+        'telefone_coop'=>'max:14',
+        'fax_coop'=>'max:14',
+        'cep_coop'=>'max:9',
+        'seg_coop'=>'required',
+        'cnpj_coop'=>'required',
       ]);
-       // $cnpj = str_replace (  array('.', '-', '/') ,  '' ,  $request->cnpj_coop_compl );
 
-      $cidadecoop = str_replace ( array("á", "à", "â", "ã", "Á", "À", "Â", "Ã"), "a", $request->municipio_coop );
-      $cidadecoop = str_replace ( array('é', 'è', 'ê', 'É', 'È', 'Ê'), 'e', $cidadecoop );
-      $cidadecoop = str_replace ( array('í', 'ì', 'î', 'Í', 'Ì', 'Î'), 'i', $cidadecoop );
-      $cidadecoop = str_replace ( array('ó', 'ò', 'ô', 'õ', 'Ó', 'Ò', 'Ô', 'Õ'), 'o', $cidadecoop );
-      $cidadecoop = str_replace ( array('ú', 'ù', 'û', 'Ú', 'Ù', 'Û'), 'u', $cidadecoop );
-      $cidadecoop = strtoupper($cidadecoop);
+      $cidadecoop = $this->acerta_cidade($request->municipio_coop);
       $ufcoop = strtoupper($request->uf_coop);
       $nomecoop = strtoupper($request->nome_coop);  
 
-      // return var_dump($uf);
-
       $cidade_cod = DB::table('coop.municipio_uf_ibge')
-                ->where('municipio','=', $cidadecoop)
-                ->where('uf', '=', $ufcoop)
-                ->first();
-
-      // return var_dump($request->seg_coop);
+                      ->where('municipio','=', $cidadecoop)
+                      ->where('uf', '=', $ufcoop)
+                      ->first();
 
       $cnpjcompleto = $this->completa_cnpj($request->cnpj_coop);
 
-      // return var_dump($cnpjcompleto);
-
-      // $geocod = $request->end_coop.",".$request->compl_coop.",".$cidadecoop;
-      // $geocode = file_get_contents("https://\maps.google.com/maps/api/geocode/json?key=AIzaSyBt7J4ot2wu_ztA8-aZtWH3ZFqX_0Gpbbk&address=".$geocod.'&sensor=false');
-      // return var_dump($geocode);
-
-       if ($request->seg_coop == 'Cooperativa de Agro'){          
+      if ($request->seg_coop == 'Cooperativa de Agro')
+      {          
         Agrocoop::create([
           'cnpj'=>$request->cnpj_coop, 'telefone'=>$request->telefone_coop,
           'fax'=>$request->fax_coop, 'natureza_juridica'=>$request->natureza_coop,
@@ -268,7 +414,8 @@ class CoopController extends Controller
         ]);
         return redirect('lista_coop')->with('status', 'Inserido com sucesso.');
       }
-      else{
+      else
+      {
         Creditocoop::create([
           'cnpj'=>$request->cnpj_coop, 'telefone'=>$request->telefone_coop,
           'fax'=>$request->fax_coop, 'natureza_juridica'=>$request->natureza_coop,
@@ -287,6 +434,7 @@ class CoopController extends Controller
         return redirect('lista_coop')->with('status', 'Inserido com sucesso.');
       }
     }
+// ---------------------------------------------------------------------------------------------------------------------------------    
     public function download_coop(Request $request){
       $coop = DB::table('arquivo_coop')
                 ->where('instituicao_id','=', $request->input('id'))
@@ -296,12 +444,12 @@ class CoopController extends Controller
       $coopcnpj = DB::table('coop.instituicao')
                 ->where('id','=', $request->input('id'))
                 ->first();
-       // return var_dump($coop);
+    
         return view('download_coop')
             ->with('coop', $coop)
             ->with('coopcnpj', $coopcnpj);
     }
-
+// ---------------------------------------------------------------------------------------------------------------------------------
     public function editar_submit_coop(Request $request){
       $id = $request->session()->get('id_session');
 
@@ -315,12 +463,7 @@ class CoopController extends Controller
           'cnpj_coop'=>'required',
       ]);
 
-      $cidadecoop = str_replace ( array("á", "à", "â", "ã", "Á", "À", "Â", "Ã"), "a", $request->municipio_coop );
-      $cidadecoop = str_replace ( array('é', 'è', 'ê', 'É', 'È', 'Ê'), 'e', $cidadecoop );
-      $cidadecoop = str_replace ( array('í', 'ì', 'î', 'Í', 'Ì', 'Î'), 'i', $cidadecoop );
-      $cidadecoop = str_replace ( array('ó', 'ò', 'ô', 'õ', 'Ó', 'Ò', 'Ô', 'Õ'), 'o', $cidadecoop );
-      $cidadecoop = str_replace ( array('ú', 'ù', 'û', 'Ú', 'Ù', 'Û'), 'u', $cidadecoop );
-      $cidadecoop = strtoupper($cidadecoop);
+      $cidadecoop = $this->acerta_cidade($request->municipio_coop); 
       $ufcoop = strtoupper($request->uf_coop);
       $nomecoop = strtoupper($request->nome_coop);
 
@@ -332,8 +475,7 @@ class CoopController extends Controller
       $cnpjcompleto = $this->completa_cnpj($request->cnpj_coop);
 
       $coop = Instituicao::find($id);
-      // return var_dump($coop);
-      // $cnpj = str_replace (  array('.', '-', '/') ,  '' ,  $request->cnpj_coop_compl );
+    
       $coop->fill([
         'cnpj'=>$request->cnpj_coop, 'telefone'=>$request->telefone_coop,
         'fax'=>$request->fax_coop, 'natureza_juridica'=>$request->natureza_coop,
@@ -352,13 +494,13 @@ class CoopController extends Controller
       $coop->save();
       return redirect()->back()->with('status', 'Editado com sucesso.');
     }
-
+// ---------------------------------------------------------------------------------------------------------------------------------
     public function download_submit(Request $request){
       $myFile = public_path("uploads/".$request->arq_tipo."/".$request->arq_nome);
-      // return var_dump($myFile);
+  
       return response()->download($myFile);
     }
-
+// ---------------------------------------------------------------------------------------------------------------------------------
     public function showUploadFile(Request $request) {
       $this->validate($request,[
         'arq'=>'required',
@@ -368,32 +510,10 @@ class CoopController extends Controller
         'coop_cnpj'=>'required',
         ]
       );
-      // return $request->all();
       $file = $request->file('arq');
-   
-      //Display File Name
-      echo 'File Name: '.$file->getClientOriginalName() ;
-      echo '<br>';
-   
-      //Display File Extension
-      echo 'File Extension: '.$file->getClientOriginalExtension() ;
-      echo '<br>';
-   
-      //Display File Real Path
-      echo 'File Real Path: '.$file->getRealPath() ;
-      echo '<br>';
-   
-      //Display File Size
-      echo 'File Size: '.$file->getSize() ;
-      echo '<br>';
-   
-      //Display File Mime Type
-      echo 'File Mime Type: '.$file->getMimeType() ;
 
       $file_name = $request->coop_cnpj."_".$request->tArq."_".$request->anoArq.'.'.$file->getClientOriginalExtension();
    
-      //Move Uploaded File
-      // $destinationPath = 'uploads';
       $destinationPath = 'uploads/'.$request->tArq;
 
       try{
@@ -409,10 +529,8 @@ class CoopController extends Controller
       $file->move($destinationPath,$file_name );
       // Storage::disk('gdrive')->put('churras.txt', $file);
       return redirect()->back()->with('status', 'Upload feito com sucesso.');
-
    }
-
-
+// ---------------------------------------------------------------------------------------------------------------------------------
   public function completa_cnpj_banco (){
     // $array_coop =  Instituicao::all();
     $array_coop =  DB::table('coop.instituicao_banco_aux')
@@ -431,7 +549,21 @@ class CoopController extends Controller
           ->update(['cnpj_completo' => $coop->cnpj_completo]);
       }
   }
-
+// ---------------------------------------------------------------------------------------------------------------------------------  
+  function acerta_cidade ( $cidade ){
+    $cidadecoop = str_replace ( array("á", "à", "â", "ã", "Á", "À", "Â", "Ã"), "a", $cidade );
+    $cidadecoop = str_replace ( array('é', 'è', 'ê', 'É', 'È', 'Ê'), 'e', $cidadecoop );
+    $cidadecoop = str_replace ( array('í', 'ì', 'î', 'Í', 'Ì', 'Î'), 'i', $cidadecoop );
+    $cidadecoop = str_replace ( array('ó', 'ò', 'ô', 'õ', 'Ó', 'Ò', 'Ô', 'Õ'), 'o', $cidadecoop );
+    $cidadecoop = str_replace ( array('ú', 'ù', 'û', 'Ú', 'Ù', 'Û'), 'u', $cidadecoop );
+    $cidadecoop = strtoupper($cidadecoop);
+    $cidadecoop = str_replace("D'O", "DO O", $cidadecoop);
+    $cidadecoop = str_replace("D'A", "DA A", $cidadecoop);
+    $cidadecoop = str_replace("Ç", "C", $cidadecoop);
+    $cidadecoop = str_replace("-", " ", $cidadecoop);
+    return $cidadecoop;
+  }
+// ---------------------------------------------------------------------------------------------------------------------------------
   /**
    * Completa CNPJ
    *

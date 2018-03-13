@@ -9,6 +9,7 @@ class Creditocoop extends Model
     protected $table = 'coop.instituicao_credito';
     public $timestamps = false;
 
+
   protected $fillable = [
     'cnpj', 'telefone', 'fax',
     'natureza_juridica', 'tipo',

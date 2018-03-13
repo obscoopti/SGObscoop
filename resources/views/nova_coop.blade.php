@@ -28,7 +28,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                   <div class="left">
-                   Nova Cooperativa
+                   Cadastro Cooperativa Manual
                   </div>
                 </div>
                 <div class="panel-body">
