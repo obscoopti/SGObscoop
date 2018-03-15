@@ -203,150 +203,176 @@ class CoopController extends Controller
         'arq'=>'required',
       ]);
       $file = $request->file('arq');
-      $csv = $this->readCSV($file); 
+      $csv = $this->readCSV($file);
       foreach ($csv as $csvs) 
       {
-        $coope =  preg_split("/;/", $csvs[0]);
-        $coop = DB::table('sgobscoop.instituicao')
-                    ->where('cnpj','=', $coope[0])
-                    ->first();
-        if($coope[0] == ''){
+        $coope = preg_split("/;/", $csvs[0]);
+
+        if($coope[0] == '' || $coope == null || $coope == 'null' || $coope == ' '){
           return redirect()->back()->with('status', 'Cadastro feito com sucesso.');
         }
-        if ($coope[1] == 'CREDITO' ) 
-        {
-          if ($coop == null) 
-          {
-            $cnpjcompleto = $this->completa_cnpj($coope[0]);
-            $cidadecoop = $this->acerta_cidade($coope[5]);
-            $ufcoop = strtoupper($coope[4]);
-            $nomecoop = strtoupper($coope[7]);
-            $tel = "(".$coope[12].")".$coope[13];
+        
+        $coop = DB::table('sgobscoop.instituicao')
+                    ->where('cnpj','=', $coope[1])
+                    ->first();
 
-            $cidade_cod = DB::table('coop.municipio_uf_ibge')
-                ->where('municipio','=', $cidadecoop)
-                ->where('uf', '=', $ufcoop)
-                ->first();
+        DB::table('sgobscoop.instituicao')
+                  ->where('id', $coop->id)
+                  ->update([ 'auditor' => $coope[0]]);
+
+        // if ($coope[1] == 'CREDITO' ){
+        //   foreach ($coope as $coopes) {
+          
+        //     if ($coopes == 1 || $coopes == 0) {
+        //       if ($coopes == 1 ){
+        //         DB::table('sgobscoop.instituicao')
+        //           ->where('id', $coop->id)
+        //           ->update([ 'situacao' => 'ATIVA']);
+        //       }
+        //       else{
+        //         DB::table('sgobscoop.instituicao')
+        //           ->where('id', $coop->id)
+        //           ->update([ 'situacao' => 'INATIVA']);
+        //       }
+        //       // dd($coopes,$coop);
+        //     }
+        //   }
+        //   $la = $coop;
+        //   $lala = $coope[0];
+        // }
+
+        // if ($coope[1] == 'CREDITO' ) 
+        // {
+        //   if ($coop == null) 
+        //   {
+        //     $cnpjcompleto = $this->completa_cnpj($coope[0]);
+        //     $cidadecoop = $this->acerta_cidade($coope[5]);
+        //     $ufcoop = strtoupper($coope[4]);
+        //     $nomecoop = strtoupper($coope[7]);
+        //     $tel = "(".$coope[12].")".$coope[13];
+
+        //     $cidade_cod = DB::table('coop.municipio_uf_ibge')
+        //         ->where('municipio','=', $cidadecoop)
+        //         ->where('uf', '=', $ufcoop)
+        //         ->first();
               
-            if ($cidade_cod == null) {
-              return var_dump($cidadecoop,$coope,$cnpjcompleto);
-            }
-            $id = DB::table('sgobscoop.instituicao')->insertGetId([
-              'cnpj'=>$coope[0], 'telefone'=>$tel,
-              'fax'=>"", 'natureza_juridica'=>"Sociedade Cooperativa",
-              'tipo'=>"Cooperativa de Crédito", 'situacao'=>"",
-              'auditor'=>"", 'endereco_eletronico'=>$coope[14],
-              'codigo_compensacao'=>"", 'nome'=>$nomecoop,
-              'endereco'=>$coope[8], 'complemento'=>$coope[9],
-              'bairro'=>$coope[10], 'cep'=>$coope[11],
-              'municipio'=>$cidadecoop, 'uf'=>$ufcoop,
-              'tipo_cooperativa'=>"", 'classe_cooperativa'=>$coope[2],
-              'site'=>$coope[15], 'categ_coop_sing'=>$coope[3],
-              'filiacao'=>$coope[6], 'lat'=>"",
-              'long'=>"", 'cnpj_completo'=>$cnpjcompleto,
-              'cod_municipio'=>$cidade_cod->cod_municipio, 'cod_uf'=>$cidade_cod->cod_uf,
-            ]);
-          }
-          else
-          {
-            $cnpjcompleto = $this->completa_cnpj($coope[0]);
-            $cidadecoop = $this->acerta_cidade($coope[5]);
-            $ufcoop = strtoupper($coope[4]);
-            $nomecoop = strtoupper($coope[7]);
-            $tel = "(".$coope[12].")".$coope[13];
-            $cidade_cod = DB::table('coop.municipio_uf_ibge')
-                            ->where('municipio','=', $cidadecoop)
-                            ->where('uf', '=', $ufcoop)
-                            ->first();
+        //     if ($cidade_cod == null) {
+        //       return var_dump($cidadecoop,$coope,$cnpjcompleto);
+        //     }
+        //     $id = DB::table('sgobscoop.instituicao')->insertGetId([
+        //       'cnpj'=>$coope[0], 'telefone'=>$tel,
+        //       'fax'=>"", 'natureza_juridica'=>"Sociedade Cooperativa",
+        //       'tipo'=>"Cooperativa de Crédito", 'situacao'=>"",
+        //       'auditor'=>"", 'endereco_eletronico'=>$coope[14],
+        //       'codigo_compensacao'=>"", 'nome'=>$nomecoop,
+        //       'endereco'=>$coope[8], 'complemento'=>$coope[9],
+        //       'bairro'=>$coope[10], 'cep'=>$coope[11],
+        //       'municipio'=>$cidadecoop, 'uf'=>$ufcoop,
+        //       'tipo_cooperativa'=>"", 'classe_cooperativa'=>$coope[2],
+        //       'site'=>$coope[15], 'categ_coop_sing'=>$coope[3],
+        //       'filiacao'=>$coope[6], 'lat'=>"",
+        //       'long'=>"", 'cnpj_completo'=>$cnpjcompleto,
+        //       'cod_municipio'=>$cidade_cod->cod_municipio, 'cod_uf'=>$cidade_cod->cod_uf,
+        //     ]);
+        //   }
+        //   else
+        //   {
+        //     $cnpjcompleto = $this->completa_cnpj($coope[0]);
+        //     $cidadecoop = $this->acerta_cidade($coope[5]);
+        //     $ufcoop = strtoupper($coope[4]);
+        //     $nomecoop = strtoupper($coope[7]);
+        //     $tel = "(".$coope[12].")".$coope[13];
+        //     $cidade_cod = DB::table('coop.municipio_uf_ibge')
+        //                     ->where('municipio','=', $cidadecoop)
+        //                     ->where('uf', '=', $ufcoop)
+        //                     ->first();
 
-            if ($cidade_cod == null) {
-              return var_dump($cidadecoop,$coope,$cnpjcompleto);
-            }
+        //     if ($cidade_cod == null) {
+        //       return var_dump($cidadecoop,$coope,$cnpjcompleto);
+        //     }
 
-            DB::table('sgobscoop.instituicao')
-              ->where('id', $coop->id)
-              ->update([
-                'cnpj'=>$coope[0], 'telefone'=>$tel,
-                'fax'=>"", 'natureza_juridica'=>"Sociedade Cooperativa",
-                'tipo'=>"Cooperativa de Crédito", 'situacao'=>"",
-                'auditor'=>"", 'endereco_eletronico'=>$coope[14],
-                'codigo_compensacao'=>"", 'nome'=>$nomecoop,
-                'endereco'=>$coope[8], 'complemento'=>$coope[9],
-                'bairro'=>$coope[10], 'cep'=>$coope[11],
-                'municipio'=>$cidadecoop, 'uf'=>$ufcoop,
-                'tipo_cooperativa'=>"", 'classe_cooperativa'=>$coope[2],
-                'site'=>$coope[15], 'categ_coop_sing'=>$coope[3],
-                'filiacao'=>$coope[6], 'lat'=>"",
-                'long'=>"", 'cnpj_completo'=>$cnpjcompleto,
-                'cod_municipio'=>$cidade_cod->cod_municipio, 'cod_uf'=>$cidade_cod->cod_uf
-              ]);
-          }
-        }
-        else
-        {  
-          if ($coop == null) 
-          {
-            $cnpjcompleto = $this->completa_cnpj($coope[0]);
-            $cidadecoop = $this->acerta_cidade($coope[5]);
-            $ufcoop = strtoupper($coope[4]);
-            $nomecoop = strtoupper($coope[7]);
-            $tel = "(".$coope[12].")".$coope[13];
-            $cidade_cod = DB::table('coop.municipio_uf_ibge')
-                            ->where('municipio','=', $cidadecoop)
-                            ->where('uf', '=', $ufcoop)
-                            ->first();
-            if ($cidade_cod == null) {
-              return var_dump($cidadecoop,$coope,$cnpjcompleto);
-            }
-            $id = DB::table('sgobscoop.instituicao')->insertGetId([
-              'cnpj'=>$coope[0], 'telefone'=>$tel,
-              'fax'=>"", 'natureza_juridica'=>"Sociedade Cooperativa",
-              'tipo'=>"Cooperativa de Crédito", 'situacao'=>"",
-              'auditor'=>"", 'endereco_eletronico'=>$coope[14],
-              'codigo_compensacao'=>"", 'nome'=>$nomecoop,
-              'endereco'=>$coope[8], 'complemento'=>$coope[9],
-              'bairro'=>$coope[10], 'cep'=>$coope[11],
-              'municipio'=>$cidadecoop, 'uf'=>$ufcoop,
-              'tipo_cooperativa'=>"", 'classe_cooperativa'=>$coope[2],
-              'site'=>$coope[15], 'categ_coop_sing'=>$coope[3],
-              'filiacao'=>$coope[6], 'lat'=>"",
-              'long'=>"", 'cnpj_completo'=>$cnpjcompleto,
-              'cod_municipio'=>$cidade_cod->cod_municipio, 'cod_uf'=>$cidade_cod->cod_uf
-            ]);
-          }
-          else
-          {
-            $cnpjcompleto = $this->completa_cnpj($coope[0]);
-            $cidadecoop = $this->acerta_cidade($coope[5]);
-            $ufcoop = strtoupper($coope[4]);
-            $nomecoop = strtoupper($coope[7]);
-            $tel = "(".$coope[12].")".$coope[13];
-            $cidade_cod = DB::table('coop.municipio_uf_ibge')
-                            ->where('municipio','=', $cidadecoop)
-                            ->where('uf', '=', $ufcoop)
-                            ->first();
-            if ($cidade_cod == null) {
-             return var_dump($cidadecoop,$coope,$cnpjcompleto);
-            }                
-            DB::table('sgobscoop.instituicao')
-              ->where('id', $coop->id)
-              ->update([
-                'cnpj'=>$coope[0], 'telefone'=>$tel,
-                'fax'=>"", 'natureza_juridica'=>"Sociedade Cooperativa",
-                'tipo'=>"Cooperativa de Crédito", 'situacao'=>"",
-                'auditor'=>"", 'endereco_eletronico'=>$coope[14],
-                'codigo_compensacao'=>"", 'nome'=>$nomecoop,
-                'endereco'=>$coope[8], 'complemento'=>$coope[9],
-                'bairro'=>$coope[10], 'cep'=>$coope[11],
-                'municipio'=>$cidadecoop, 'uf'=>$ufcoop,
-                'tipo_cooperativa'=>"", 'classe_cooperativa'=>$coope[2],
-                'site'=>$coope[15], 'categ_coop_sing'=>$coope[3],
-                'filiacao'=>$coope[6], 'lat'=>"",
-                'long'=>"", 'cnpj_completo'=>$cnpjcompleto,
-                'cod_municipio'=>$cidade_cod->cod_municipio, 'cod_uf'=>$cidade_cod->cod_uf
-              ]);
-          }
-        }
+        //     DB::table('sgobscoop.instituicao')
+        //       ->where('id', $coop->id)
+        //       ->update([
+        //         'cnpj'=>$coope[0], 'telefone'=>$tel,
+        //         'fax'=>"", 'natureza_juridica'=>"Sociedade Cooperativa",
+        //         'tipo'=>"Cooperativa de Crédito", 'situacao'=>"",
+        //         'auditor'=>"", 'endereco_eletronico'=>$coope[14],
+        //         'codigo_compensacao'=>"", 'nome'=>$nomecoop,
+        //         'endereco'=>$coope[8], 'complemento'=>$coope[9],
+        //         'bairro'=>$coope[10], 'cep'=>$coope[11],
+        //         'municipio'=>$cidadecoop, 'uf'=>$ufcoop,
+        //         'tipo_cooperativa'=>"", 'classe_cooperativa'=>$coope[2],
+        //         'site'=>$coope[15], 'categ_coop_sing'=>$coope[3],
+        //         'filiacao'=>$coope[6], 'cnpj_completo'=>$cnpjcompleto,
+        //         'cod_municipio'=>$cidade_cod->cod_municipio, 'cod_uf'=>$cidade_cod->cod_uf
+        //       ]);
+        //   }
+        // }
+        // else
+        // {  
+        //   if ($coop == null) 
+        //   {
+        //     $cnpjcompleto = $this->completa_cnpj($coope[0]);
+        //     $cidadecoop = $this->acerta_cidade($coope[5]);
+        //     $ufcoop = strtoupper($coope[4]);
+        //     $nomecoop = strtoupper($coope[7]);
+        //     $tel = "(".$coope[12].")".$coope[13];
+        //     $cidade_cod = DB::table('coop.municipio_uf_ibge')
+        //                     ->where('municipio','=', $cidadecoop)
+        //                     ->where('uf', '=', $ufcoop)
+        //                     ->first();
+        //     if ($cidade_cod == null) {
+        //       return var_dump($cidadecoop,$coope,$cnpjcompleto);
+        //     }
+        //     $id = DB::table('sgobscoop.instituicao')->insertGetId([
+        //       'cnpj'=>$coope[0], 'telefone'=>$tel,
+        //       'fax'=>"", 'natureza_juridica'=>"Sociedade Cooperativa",
+        //       'tipo'=>"Cooperativa de Agro", 'situacao'=>"",
+        //       'auditor'=>"", 'endereco_eletronico'=>$coope[14],
+        //       'codigo_compensacao'=>"", 'nome'=>$nomecoop,
+        //       'endereco'=>$coope[8], 'complemento'=>$coope[9],
+        //       'bairro'=>$coope[10], 'cep'=>$coope[11],
+        //       'municipio'=>$cidadecoop, 'uf'=>$ufcoop,
+        //       'tipo_cooperativa'=>"", 'classe_cooperativa'=>$coope[2],
+        //       'site'=>$coope[15], 'categ_coop_sing'=>$coope[3],
+        //       'filiacao'=>$coope[6], 'lat'=>"",
+        //       'long'=>"", 'cnpj_completo'=>$cnpjcompleto,
+        //       'cod_municipio'=>$cidade_cod->cod_municipio, 'cod_uf'=>$cidade_cod->cod_uf
+        //     ]);
+        //   }
+        //   else
+        //   {
+        //     $cnpjcompleto = $this->completa_cnpj($coope[0]);
+        //     $cidadecoop = $this->acerta_cidade($coope[5]);
+        //     $ufcoop = strtoupper($coope[4]);
+        //     $nomecoop = strtoupper($coope[7]);
+        //     $tel = "(".$coope[12].")".$coope[13];
+        //     $cidade_cod = DB::table('coop.municipio_uf_ibge')
+        //                     ->where('municipio','=', $cidadecoop)
+        //                     ->where('uf', '=', $ufcoop)
+        //                     ->first();
+        //     if ($cidade_cod == null) {
+        //      return var_dump($cidadecoop,$coope,$cnpjcompleto);
+        //     }                
+        //     DB::table('sgobscoop.instituicao')
+        //       ->where('id', $coop->id)
+        //       ->update([
+        //         'cnpj'=>$coope[0], 'telefone'=>$tel,
+        //         'fax'=>"", 'natureza_juridica'=>"Sociedade Cooperativa",
+        //         'tipo'=>"Cooperativa de Agro", 'situacao'=>"",
+        //         'auditor'=>"", 'endereco_eletronico'=>$coope[14],
+        //         'codigo_compensacao'=>"", 'nome'=>$nomecoop,
+        //         'endereco'=>$coope[8], 'complemento'=>$coope[9],
+        //         'bairro'=>$coope[10], 'cep'=>$coope[11],
+        //         'municipio'=>$cidadecoop, 'uf'=>$ufcoop,
+        //         'tipo_cooperativa'=>"", 'classe_cooperativa'=>$coope[2],
+        //         'site'=>$coope[15], 'categ_coop_sing'=>$coope[3],
+        //         'filiacao'=>$coope[6], 'cnpj_completo'=>$cnpjcompleto,
+        //         'cod_municipio'=>$cidade_cod->cod_municipio, 'cod_uf'=>$cidade_cod->cod_uf
+        //       ]);
+        //   }
+        // }
       }
       return redirect()->back()->with('status', 'Cadastro feito com sucesso.');
    }
