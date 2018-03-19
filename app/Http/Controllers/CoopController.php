@@ -197,6 +197,37 @@ class CoopController extends Controller
       return view('cadastro_coop');
     }
 // ---------------------------------------------------------------------------------------------------------------------------------
+    public function auditor_coop(Request $request)
+    {
+      return view('auditor_coop');
+    }
+// ---------------------------------------------------------------------------------------------------------------------------------
+    public function auditor_file(Request $request)
+    {
+      $this->validate($request,[
+        'arq'=>'required',
+      ]);
+      $file = $request->file('arq');
+      $csv = $this->readCSV($file);
+      foreach ($csv as $csvs) 
+      {
+        $coope = preg_split("/;/", $csvs[0]);
+
+        if($coope[0] == '' || $coope == null || $coope == 'null' || $coope == ' '){
+          return redirect()->back()->with('status', 'Inserido com sucesso.');
+        }
+        
+        $coop = DB::table('sgobscoop.instituicao')
+                    ->where('cnpj','=', $coope[1])
+                    ->first();
+
+        DB::table('sgobscoop.instituicao')
+                  ->where('id', $coop->id)
+                  ->update([ 'auditor' => $coope[0]]);
+      }
+      return redirect()->back()->with('status', 'Inserido com sucesso.');
+    }
+// ---------------------------------------------------------------------------------------------------------------------------------
     public function cadastro_file(Request $request) 
     {
       $this->validate($request,[

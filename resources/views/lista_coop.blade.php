@@ -20,17 +20,22 @@
                 <div class="panel-heading">
                     <div class="right" style="float:right;margin-top:-7px;">
                         <button type="button" class="btn btn-success">
-                        <a style=" all: unset;" href="{{url('cadastro_coop')}}">+ Cadastro Automático</a>
+                            <a style=" all: unset;" href="{{url('auditor_coop')}}">+ Cadastro Auditor Coop</a>
                         </button>
                     </div>
-                  <div class="right" style="float:right;margin-top:-7px;">
-                    <button type="button" class="btn btn-success">
-                      <a style=" all: unset;" href="{{url('nova_coop')}}">+ Cadastro Manual</a>
-                    </button>
-                  </div>
-                  <div class="left">
-                    Lista de Cooperativas
-                  </div>
+                    <div class="right" style="float:right;margin-top:-7px;">
+                        <button type="button" class="btn btn-success">
+                            <a style=" all: unset;" href="{{url('cadastro_coop')}}">+ Cadastro Automático Coop</a>
+                        </button>
+                    </div>
+                    <div class="right" style="float:right;margin-top:-7px;">
+                        <button type="button" class="btn btn-success">
+                            <a style=" all: unset;" href="{{url('nova_coop')}}">+ Cadastro Manual Coop</a>
+                        </button>
+                    </div>
+                    <div class="left">
+                        Lista de Cooperativas
+                    </div>
                 </div>
 
                 <div class="panel-body">

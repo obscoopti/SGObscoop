@@ -32,6 +32,8 @@ Route::get('/download_coop', 'CoopController@download_coop');
 Route::get('/download_submit','CoopController@download_submit');
 Route::get('/cadastro_coop', 'CoopController@cadastro_coop');
 Route::post('/cadastro_coop','CoopController@cadastro_file') ;
+Route::get('/auditor_coop', 'CoopController@auditor_coop');
+Route::post('/auditor_coop','CoopController@auditor_file') ;
 Route::get('/cadastro_df', 'CoopController@cadastro_df');
 Route::post('/df_submit', 'CoopController@df_submit');
 

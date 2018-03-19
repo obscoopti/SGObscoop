@@ -16,7 +16,7 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div>
-                         Cadastro Cooperativas Automático
+                         Cadastro Auditor Cooperativas
                     </div>
                 </div>
                 @if (session('status'))
@@ -25,13 +25,13 @@
                         </div>
                     @endif
                 <div align="center">
-                     {{Form::open(array('url' => '/cadastro_coop','files'=>'true') ) }}
+                     {{Form::open(array('url' => '/auditor_coop','files'=>'true') ) }}
                      <br> <br>
-                     <p><strong> Selecione o CSV com as Cooperativas </strong></p>
+                     <p><strong> Selecione o CSV com os Auditores </strong></p>
                      <br>
                      {{Form::file('arq') }}
                      <br> 
-                     {{Form::submit('Cadastrar Cooperativas') }}
+                     {{Form::submit('Cadastrar Auditor') }}
                      {{Form::close() }}
                     </div>    
             </div>
