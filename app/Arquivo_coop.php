@@ -10,6 +10,6 @@ class Arquivo_coop extends Model
 	// public $timestamps = false;
 
   protected $fillable = [
-    'tipo', 'nome', 'instituicao_id', 'ano',
+    'tipo', 'nome', 'instituicao_id', 'ano','user',
   ];
 }

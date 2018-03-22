@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+
+use File;
 use App\Creditocoop;
 use App\Agrocoop;
 use App\Instituicao;
@@ -12,6 +14,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class CoopController extends Controller
 {
@@ -191,6 +194,15 @@ class CoopController extends Controller
     {
     	return view('nova_coop');
     }
+// ---------------------------------------------------------------------------------------------------------------------------------
+    public function editar_controle(Request $request)
+    {
+      $user = Auth::user();
+      $id = Auth::id();
+      return var_dump($user);
+      return view ('editar_controle');
+    }
+
 // ---------------------------------------------------------------------------------------------------------------------------------
     public function cadastro_coop(Request $request)
     {
@@ -501,15 +513,18 @@ class CoopController extends Controller
       $coopcnpj = DB::table('coop.instituicao')
                 ->where('id','=', $request->input('id'))
                 ->first();
-    
+
+      $user = Auth::user();
+      
         return view('download_coop')
             ->with('coop', $coop)
-            ->with('coopcnpj', $coopcnpj);
+            ->with('coopcnpj', $coopcnpj)
+            ->with('user', $user);
     }
 // ---------------------------------------------------------------------------------------------------------------------------------
     public function editar_submit_coop(Request $request){
       $id = $request->session()->get('id_session');
-
+        // return var_dump($id);
        $this->validate($request,[
           'nome_coop'=>'required',
           'uf_coop'=>'max:2',
@@ -567,6 +582,8 @@ class CoopController extends Controller
         'coop_cnpj'=>'required',
         ]
       );
+      $user = Auth::user();
+     
       $file = $request->file('arq');
 
       $file_name = $request->coop_cnpj."_".$request->tArq."_".$request->anoArq.'.'.$file->getClientOriginalExtension();
@@ -579,6 +596,7 @@ class CoopController extends Controller
                   'nome'=> $file_name, 
                   'instituicao_id'=> $request->coop_id, 
                   'ano'=> $request->anoArq,
+                  'user'=>$user->name,
             ]);
       }catch(\Exception $e){
         return redirect()->back()->withErrors("Este tipo de arquivo ({$request->tArq}) já existe para {$request->anoArq}.");
@@ -586,6 +604,17 @@ class CoopController extends Controller
       $file->move($destinationPath,$file_name );
       // Storage::disk('gdrive')->put('churras.txt', $file);
       return redirect()->back()->with('status', 'Upload feito com sucesso.');
+   }
+// ---------------------------------------------------------------------------------------------------------------------------------
+   public function download_delete(Request $request)
+   {
+    
+    DB::table('sgobscoop.arquivo_coop')->where('nome', '=',$request->arq_nome)->delete();
+    
+    $myFile = 'uploads/'.$request->arq_tipo.'/'.$request->arq_nome;
+    
+    File::delete($myFile);
+    return redirect()->back()->with('status', 'Deletado com sucesso.');
    }
 // ---------------------------------------------------------------------------------------------------------------------------------
   public function completa_cnpj_banco (){

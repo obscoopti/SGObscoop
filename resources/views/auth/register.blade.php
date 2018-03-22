@@ -39,6 +39,20 @@
                             </div>
                         </div>
 
+                        <div class="form-group{{ $errors->has('nivel') ? ' has-error' : '' }}">
+                            <label for="nivel" class="col-md-4 control-label">Nível</label>
+
+                            <div class="col-md-6">
+                                <input id="nivel" type="text" class="form-control" name="nivel" value="{{ old('nivel') }}" required>
+
+                                @if ($errors->has('nivel'))
+                                    <span class="help-block">
+                                        <strong>{{ $errors->first('nivel') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
                         <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
                             <label for="password" class="col-md-4 control-label">Password</label>
 

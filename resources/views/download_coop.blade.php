@@ -39,7 +39,7 @@
                             <th>Tipo</th>
                             <th>Ano</th>
                             <th>Data</th>
-                            <th>Action</th>
+                            <th>User</th>
                         </thead>    
                         <tbody>
                             @foreach($coop as $coops)
@@ -48,6 +48,7 @@
                                 <td>{{$coops->tipo}}</td>
                                 <td>{{$coops->ano}}</td>
                                 <td>{{$coops->updated_at}}</td>
+                                <td>{{$coops->user}}</td>
                                 <td>
                                     {{Form::open(array('action' => 'CoopController@download_submit', 'method' => 'get') ) }}
                                     {{Form::hidden('coop_id',$coopcnpj->id) }}
@@ -56,6 +57,16 @@
                                     {{Form::submit('Download') }}
                                     {{Form::close() }}                                   
                                 </td>
+                                @if($user->nivel == 1)
+                                <td>
+                                    {{Form::open(array('action' => 'CoopController@download_delete', 'method' => 'get') ) }}
+                                    {{Form::hidden('coop_id',$coopcnpj->id) }}
+                                    {{Form::hidden('arq_tipo',$coops->tipo) }}
+                                    {{Form::hidden('arq_nome',$coops->nome) }}
+                                    {{Form::submit('Delete') }}
+                                    {{Form::close() }}                                   
+                                </td>
+                                @endif
                             </tr>
                             @endforeach
                         </tbody>                    
