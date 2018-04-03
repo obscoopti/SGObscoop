@@ -21,7 +21,7 @@
                     
                     <div class="right" style="float:right;margin-top:-7px;">
                         <button type="button" class="btn btn-success">
-                            <a style=" all: unset;" href="{{url('auditor_coop')}}">+ Cadastro Auditor Coop</a>
+                            <a style=" all: unset;" href="{{url('auditor_coop')}}">+ Cadastro Governança/Gestão</a>
                         </button>
                     </div>
                     <div class="right" style="float:right;margin-top:-7px;">
@@ -34,9 +34,11 @@
                             <a style=" all: unset;" href="{{url('nova_coop')}}">+ Cadastro Manual Coop</a>
                         </button>
                     </div>
+                    
                     <div class="left">
                         Lista de Cooperativas
                     </div>
+
                 </div>
 
                 <div class="panel-body">
@@ -52,7 +54,7 @@
                                 <th>CNPJ</th>
                                 <th>Nome</th>
                                 <th>Tipo</th>
-                                <th>Menu</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -64,18 +66,9 @@
                                     <td>
                                       <div class="btn-group" role="group">  
 
-                                        <a href="{{url('fonte_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs" data-toggle="tooltip" title="Fonte de Dados">F</a>
-
-                                        <a href="{{url('estatuto_coop/?cnpj='.$coop->cnpj_completo)}}" type="button" class="button btn btn-secondary btn-xs" data-toggle="tooltip" title="Estatuto">E</a>
-
-                                        <a href="{{url('df_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs" data-toggle="tooltip" title="Demonstrativo Financeiro">DF</a>
-
-                                        <a href="{{url('upload_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs" data-toggle="tooltip" title="Upload"><span class="glyphicon glyphicon-upload"></span></a>
-
-                                        <a href="{{url('download_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs" data-toggle="tooltip" title="Download"><span class="glyphicon glyphicon-download"></span></a>
-
-                                        <a href="{{url('editar_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs" data-toggle="tooltip" title="Editar"><span class="glyphicon glyphicon-edit"></span></a>
-                                        
+                                        <button type="button" class="btn btn-success">
+                                            <a style=" all: unset;" href="{{url('info_coop/?id='.$coop->id)}}">Acessar Coop</a>
+                                        </button>
                                       </div>
                                     </td>
                                 </tr>

@@ -26,6 +26,15 @@
                     @endif
                 <div align="center">
                      {{Form::open(array('url' => '/cadastro_coop','files'=>'true') ) }}
+                     <br><br>
+                     <strong>Escolha um tipo de Cooperativa</strong>
+                     <br> <br>
+                     {{ Form::select('seg_coop' ,array(
+                                        '' => 'Selecione',
+                                        '1' => 'Cooperativa de Agro',
+                                        '0' => 'Cooperativa de Crédito',
+                                        '2' => 'Posto de Atendimento',
+                                        )) }}
                      <br> <br>
                      <p><strong> Selecione o CSV com as Cooperativas </strong></p>
                      <br>

@@ -52,7 +52,7 @@
                         <tr>
                           <td>
                             <div class="col-md-6">
-                              CNPJ Cooperativa Abreviado:
+                              CNPJ Cooperativa:
                             </div>
                             <div class="col-md-6"> 
                               {{ Form::text('cnpj_coop', '', array('placeholder'=>'Ex: 12345')) }}

@@ -19,6 +19,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/lista_coop', 'CoopController@lista_coop');
+Route::get('/info_coop', 'CoopController@info_coop');
+Route::get('/analisar_df', 'CoopController@analisar_df');
 Route::get('/upload_coop', 'CoopController@upload_coop');
 Route::get('/fonte_coop', 'CoopController@fonte_coop');
 Route::post('/upload_coop','CoopController@showUploadFile') ;

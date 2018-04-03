@@ -27,11 +27,32 @@
                     <div align="center" >
                         <table class="table table-striped table-bordered table-hover table-condensed">
                                 <thead>
-                                    <th> <strong> Ano </strong></th> <th> <strong> Status </strong> </th>
+                                    <th> <strong> Ano </strong></th> <th> <strong> Status </strong> </th> <th> <strong> Ano/06 </strong> </th><th> <strong> Ano/12 </strong> </th>
                                 </thead>
                             @foreach($dados as $dado)
                                 <tr>
-                                    <td>  {{$dado->ano}} </td><td> {{" &#x2714;"}}</td>
+                                    <td>  
+                                        {{$dado->ano}} 
+                                    </td>
+                                    <td> 
+                                        {{" &#x2714;"}}
+                                    </td> 
+                                    <td>
+                                        {{Form::open(array('action' => 'CoopController@analisar_df', 'method' => 'get') ) }}
+                                        {{Form::hidden('ano',$dado->ano) }}
+                                        {{Form::hidden('cnpj',$coop->cnpj_completo) }}
+                                        {{Form::hidden('mes','06')}}
+                                        {{Form::submit('Analisar') }}
+                                        {{Form::close() }}                            
+                                    </td>
+                                    <td>
+                                        {{Form::open(array('action' => 'CoopController@analisar_df', 'method' => 'get') ) }}
+                                        {{Form::hidden('ano',$dado->ano) }}
+                                        {{Form::hidden('cnpj',$coop->cnpj_completo) }}
+                                        {{Form::hidden('mes','12')}}
+                                        {{Form::submit('Analisar') }}
+                                        {{Form::close() }}                            
+                                    </td>
                                 </tr>
                             @endforeach  
                         </table>
