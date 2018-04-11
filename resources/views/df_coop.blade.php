@@ -27,7 +27,20 @@
                     <div align="center" >
                         <table class="table table-striped table-bordered table-hover table-condensed">
                                 <thead>
-                                    <th> <strong> Ano </strong></th> <th> <strong> Status </strong> </th> <th> <strong> Ano/06 </strong> </th><th> <strong> Ano/12 </strong> </th>
+                                    <th> 
+                                        <strong> Ano </strong>
+                                    </th> 
+                                    <th> 
+                                        <strong> Status </strong> 
+                                    </th> 
+                                    @if($coop->tipo == 'Cooperativa de Crédito')
+                                        <th> 
+                                            <strong> Ano/06 </strong> 
+                                        </th>
+                                        <th> 
+                                            <strong> Ano/12 </strong> 
+                                        </th>
+                                    @endif
                                 </thead>
                             @foreach($dados as $dado)
                                 <tr>
@@ -37,22 +50,36 @@
                                     <td> 
                                         {{" &#x2714;"}}
                                     </td> 
-                                    <td>
-                                        {{Form::open(array('action' => 'CoopController@analisar_df', 'method' => 'get') ) }}
-                                        {{Form::hidden('ano',$dado->ano) }}
-                                        {{Form::hidden('cnpj',$coop->cnpj_completo) }}
-                                        {{Form::hidden('mes','06')}}
-                                        {{Form::submit('Analisar') }}
-                                        {{Form::close() }}                            
-                                    </td>
-                                    <td>
-                                        {{Form::open(array('action' => 'CoopController@analisar_df', 'method' => 'get') ) }}
-                                        {{Form::hidden('ano',$dado->ano) }}
-                                        {{Form::hidden('cnpj',$coop->cnpj_completo) }}
-                                        {{Form::hidden('mes','12')}}
-                                        {{Form::submit('Analisar') }}
-                                        {{Form::close() }}                            
-                                    </td>
+                                    @if($coop->tipo == 'Cooperativa de Crédito')
+                                        <td>
+                                            {{Form::open(array('action' => 'CoopController@analisar_df', 'method' => 'get') ) }}
+                                            {{Form::hidden('ano',$dado->ano) }}
+                                            {{Form::hidden('cnpj',$coop->cnpj_completo) }}
+                                            {{Form::hidden('mes','06')}}
+                                            {{Form::hidden('tipo',$coop->tipo)}}
+                                            {{Form::submit('Analisar') }}
+                                            {{Form::close() }}                            
+                                        </td>
+                                        <td>
+                                            {{Form::open(array('action' => 'CoopController@analisar_df', 'method' => 'get') ) }}
+                                            {{Form::hidden('ano',$dado->ano) }}
+                                            {{Form::hidden('cnpj',$coop->cnpj_completo) }}
+                                            {{Form::hidden('mes','12')}}
+                                            {{Form::hidden('tipo',$coop->tipo)}}
+                                            {{Form::submit('Analisar') }}
+                                            {{Form::close() }}                            
+                                        </td>
+                                    @endif
+                                    @if($coop->tipo == 'Cooperativa de Agro')
+                                        <td>
+                                            {{Form::open(array('action' => 'CoopController@analisar_df', 'method' => 'get') ) }}
+                                            {{Form::hidden('ano',$dado->ano) }}
+                                            {{Form::hidden('cnpj',$coop->cnpj_completo) }}
+                                            {{Form::hidden('tipo',$coop->tipo)}}
+                                            {{Form::submit('Analisar') }}
+                                            {{Form::close() }}
+                                        </td>
+                                    @endif
                                 </tr>
                             @endforeach  
                         </table>

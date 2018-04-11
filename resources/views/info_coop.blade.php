@@ -174,19 +174,26 @@
                         </tr>
                       </table>
                       <div class="btn-group" role="group">  
+                        <p>
+                          <a href="{{url('editar_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs" data-toggle="tooltip" title="Editar">Editar</span></a> /
 
-                        <a href="{{url('fonte_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs" data-toggle="tooltip" title="Fonte de Dados">Fonte-de-Dados</a>
+                          <a href="{{url('upload_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs" data-toggle="tooltip" title="Upload">Upload</a> /
 
-                        <a href="{{url('estatuto_coop/?cnpj='.$coop->cnpj_completo)}}" type="button" class="button btn btn-secondary btn-xs" data-toggle="tooltip" title="Estatuto">Estatutos</a>
+                          <a href="{{url('download_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs" data-toggle="tooltip" title="Download">Download</span></a> /
 
-                        <a href="{{url('df_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs" data-toggle="tooltip" title="Demonstrativo Financeiro">Demostrativo-Financeiro</a>
+                          @if($coop->tipo == 'Cooperativa de Crédito')
+                          <a href="{{url('estatuto_coop/?cnpj='.$coop->cnpj_completo)}}" type="button" class="button btn btn-secondary btn-xs" data-toggle="tooltip" title="Estatuto">Estatutos</a> /
+                          @endif
 
-                        <a href="{{url('upload_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs" data-toggle="tooltip" title="Upload">Upload</a>
+                          <a href="{{url('df_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs" data-toggle="tooltip" title="Demonstrativo Financeiro">Demostrativo-Financeiro</a> /
 
-                        <a href="{{url('download_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs" data-toggle="tooltip" title="Download">Download</span></a>
+                          @if($coop->tipo == 'Cooperativa de Agro')
+                          <a href="{{url('cadastro_df/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs" data-toggle="tooltip" title="Editar">Cadastro-Demonstrativo-Financeiro</span></a> /
+                          @endif
 
-                        <a href="{{url('editar_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs" data-toggle="tooltip" title="Editar">Editar</span></a>
+                          <a href="{{url('fonte_coop/?id='.$coop->id)}}" type="button" class="button btn btn-secondary btn-xs" data-toggle="tooltip" title="Fonte de Dados">Fonte-de-Dados</a>
 
+                        </p>
                       </div>
                     </div>
                 </div>

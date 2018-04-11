@@ -31,7 +31,15 @@
                                 </thead>
                             @foreach($estatutos as $estatuto)
                                 <tr>
-                                    <td>  {{$estatuto->ano_estatuto}} </td><td> {{($estatuto->estatuto_completo)?" &#x2714;": "&#x25A2;"}}</td>
+                                    <td>  {{$estatuto->ano_estatuto}} </td>
+                                    <td> {{($estatuto->estatuto_completo)?" &#x2714;": "&#x25A2;"}}</td>
+                                    <td>
+                                            {{Form::open(array('action' => 'CoopController@analisar_estatuto', 'method' => 'get') ) }}
+                                            {{Form::hidden('ano',$estatuto->ano_estatuto) }}
+                                            {{Form::hidden('cnpj',$cnpj) }}
+                                            {{Form::submit('Analisar') }}
+                                            {{Form::close() }}                            
+                                        </td>
                                 </tr>
                             @endforeach  
                         </table>
