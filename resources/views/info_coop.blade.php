@@ -19,6 +19,13 @@
                   <div class="left">
                    <strong>Informações da Cooperativa</strong>
                   </div>
+                   <div align="right" style="float:right;margin-top:-22px;">
+                        <fonte style="font-family:verdana"> 
+                            <strong>
+                                CNPJ {{$coop->cnpj_completo}}
+                            </strong>
+                        </fonte>
+                    </div>
                 </div>
                 <div class="panel-body">
                     @if (session('status'))

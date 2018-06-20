@@ -41,7 +41,9 @@ Route::post('/auditor_coop','CoopController@auditor_file') ;
 
 
 Route::get('/cadastro_df', 'CoopController@cadastro_df');
-Route::post('/df_submit', 'CoopController@df_submit');
+Route::get('/df_submit', 'CoopController@df_submit');
+// Route::post('/cadastro_df', 'CoopController@df_submit');
+
 
 
 Auth::routes();

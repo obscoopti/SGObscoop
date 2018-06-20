@@ -87,7 +87,7 @@
                   </td>
                   <td>
                     <div class="col-md-6">
-                      CEP: 
+                      : 
                     </div>
                     <div class="col-md-6">
                       {{ Form::text('cep_coop', '', array('onKeypress'=>'MascaraCep(this)', 'placeholder'=>'00000-000')) }}

@@ -1,13 +1,11 @@
 <?php
-
 namespace App\Http\Controllers;
-
-
 use File;
 use App\Creditocoop;
 use App\Agrocoop;
 use App\Instituicao;
 use App\Arquivo_coop;
+use App\Demonstrativo_financeiro;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests;
@@ -15,6 +13,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\ExpressionLanguage\ExpressionLanguage;
 
 class CoopController extends Controller
 {
@@ -605,7 +604,7 @@ class CoopController extends Controller
                       ->where('uf', '=', $ufcoop)
                       ->first();
 
-        Posto_atentimento::create([
+        Postos_atentimento::create([
           'cnpj'=>$request->cnpj_post, 'ano'=>$request->ano_post, 'nome_instituicao'=>$nomecoop,
           'tipo_dependencia'=>$request->tipo_post, 'nome_instalacao'=>$request->insta_post, 'endereco'=>$request->end_post,
           'complemento'=>$request->comp_post, 'bairro'=>$request->bairro_post, 'cep'=>$request->cep_post,
@@ -834,6 +833,7 @@ class CoopController extends Controller
    * @return int O
    *
    */
+  // ---------------------------------------------------------------------------------------------------------------------------------
   function multiplica_cnpj( $cnpj, $posicao = 5 ) {
     // Variável para o cálculo
     $calculo = 0;
@@ -862,6 +862,7 @@ class CoopController extends Controller
   * cnpj_len representa o tamnha do cnpj
   * retorna o cnpj com zeros a esquerda
   */
+  // ---------------------------------------------------------------------------------------------------------------------------------
   function completa_zeros_esquerda($cnpj, $max_len, $cnpj_len){
     for($i = 0; $i< $max_len - $cnpj_len; $i++)
       $cnpj = '0'.$cnpj;  
@@ -900,22 +901,327 @@ class CoopController extends Controller
           }
       }
   }
+// ---------------------------------------------------------------------------------------------------------------------------------
+  public function cadastro_df(Request $request){
 
-  public function cadastro_df(){
+    $coop = DB::table('coop.instituicao')
+      ->where('id','=', $request->id)
+      ->first();
 
     return view('cadastro_df')
       ->with('array_df_1',$this->array_df_1)
       ->with('array_df_2',$this->array_df_2)
-      ->with('array_df_3',$this->array_df_3);
+      ->with('array_df_3',$this->array_df_3)
+      ->with('coop', $coop);
 
   }
-
+// ---------------------------------------------------------------------------------------------------------------------------------
+  function soma_df( $valor){
+    $soma = 0;
+    if($valor != null){
+      $language = new ExpressionLanguage();
+      $soma = $language->evaluate($valor);
+    }
+    return $soma;
+  }
+// ---------------------------------------------------------------------------------------------------------------------------------
   public function df_submit(Request $request){
 
-    return $request->all();
+  // return var_dump($request['1_1']);
 
+  $this->validate($request,[
+        'ano'=>'required',
+      ]);
+
+    $id = $request->all()['id_coop'];
+
+    $coop = DB::table('coop.instituicao')
+      ->where('id','=', $id)
+      ->first();
+
+    $ano = $request->all()['ano'];
+    $cnpjcompleto = $this->completa_cnpj($coop->cnpj);
+
+   $demonstrativo = DB::table('coop.demonstrativo_fin_agro_new')
+   ->where('ano','=', $ano)
+   ->first();
+
+   if($demonstrativo == null){
+      $resultado1_1 = 0;
+      $resultado1_2 = 0;
+      $resultado1_3 = 0;
+      $resultado1 = 0;
+      // return var_dump($request->all());
+      // if(array_key_exists("1_1", $request->all()))
+      // {
+      $resultado1_1 = $this->soma_df($request->all()['1_1']);
+      // }
+      $resultado1_1 = $resultado1_1 + $resultado1_1_1 = $this->soma_df($request->all()['1_1_1']);
+      $resultado1_1 = $resultado1_1 + $resultado1_1_2 = $this->soma_df($request->all()['1_1_2']);
+      $resultado1_1 = $resultado1_1 + $resultado1_1_3 = $this->soma_df($request->all()['1_1_3']); 
+      $resultado1_1 = $resultado1_1 + $resultado1_1_3_1 = $this->soma_df($request->all()['1_1_3_1']);
+      $resultado1_1 = $resultado1_1 + $resultado1_1_3_1_1 = $this->soma_df($request->all()['1_1_3_1_1']);
+      $resultado1_1 = $resultado1_1 + $resultado1_1_3_1_2 = $this->soma_df($request->all()['1_1_3_1_2']);
+      $resultado1_1 = $resultado1_1 + $resultado1_1_3_1_3 = $this->soma_df($request->all()['1_1_3_1_3']);
+      $resultado1_1 = $resultado1_1 + $resultado1_1_3_2 = $this->soma_df($request->all()['1_1_3_2']);
+      $resultado1_1 = $resultado1_1 + $resultado1_1_3_2_1 = $this->soma_df($request->all()['1_1_3_2_1']);
+      $resultado1_1 = $resultado1_1 + $resultado1_1_3_2_2 = $this->soma_df($request->all()['1_1_3_2_2']);
+      $resultado1_1 = $resultado1_1 + $resultado1_1_3_2_3 = $this->soma_df($request->all()['1_1_3_2_3']);
+      $resultado1_1 = $resultado1_1 + $resultado1_1_3_3 = $this->soma_df($request->all()['1_1_3_3']);
+      $resultado1_1 = $resultado1_1 + $resultado1_1_3_3_1 = $this->soma_df($request->all()['1_1_3_3_1']);
+      $resultado1_1 = $resultado1_1 + $resultado1_1_3_3_2 = $this->soma_df($request->all()['1_1_3_3_2']);
+      $resultado1_1 = $resultado1_1 + $resultado1_1_3_3_3 = $this->soma_df($request->all()['1_1_3_3_3']);
+      $resultado1_1 = $resultado1_1 + $resultado1_1_4 = $this->soma_df($request->all()['1_1_4']);
+      $resultado1_1 = $resultado1_1 + $resultado1_1_4_1 = $this->soma_df($request->all()['1_1_4_1']);
+      $resultado1_1 = $resultado1_1 + $resultado1_1_4_1_1 = $this->soma_df($request->all()['1_1_4_1_1']);
+      $resultado1_1 = $resultado1_1 + $resultado1_1_4_1_2 = $this->soma_df($request->all()['1_1_4_1_2']);
+      $resultado1_1 = $resultado1_1 + $resultado1_1_4_1_3 = $this->soma_df($request->all()['1_1_4_1_3']);
+      $resultado1_1 = $resultado1_1 + $resultado1_1_4_1_4 = $this->soma_df($request->all()['1_1_4_1_4']);
+      $resultado1_1 = $resultado1_1 + $resultado1_1_4_1_5 = $this->soma_df($request->all()['1_1_4_1_5']);
+      $resultado1_1 = $resultado1_1 + $resultado1_1_4_1_6 = $this->soma_df($request->all()['1_1_4_1_6']);
+      $resultado1_1 = $resultado1_1 + $resultado1_1_4_2 = $this->soma_df($request->all()['1_1_4_2']);
+      $resultado1_1 = $resultado1_1 + $resultado1_1_4_2_1 = $this->soma_df($request->all()['1_1_4_2_1']);
+      $resultado1_1 = $resultado1_1 + $resultado1_1_4_2_2 = $this->soma_df($request->all()['1_1_4_2_2']);
+      $resultado1_1 = $resultado1_1 + $resultado1_1_5 = $this->soma_df($request->all()['1_1_5']);
+      $resultado1_2 = $this->soma_df($request->all()['1_2']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_1 = $this->soma_df($request->all()['1_2_1']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_1_1 = $this->soma_df($request->all()['1_2_1_1']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_1_1_1 = $this->soma_df($request->all()['1_2_1_1_1']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_1_1_2 = $this->soma_df($request->all()['1_2_1_1_2']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_1_1_3 = $this->soma_df($request->all()['1_2_1_1_3']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_1_2 = $this->soma_df($request->all()['1_2_1_2']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_1_2_1 = $this->soma_df($request->all()['1_2_1_2_1']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_1_2_2 = $this->soma_df($request->all()['1_2_1_2_2']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_1_2_3 = $this->soma_df($request->all()['1_2_1_2_3']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_1_3 = $this->soma_df($request->all()['1_2_1_3']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_1_4 = $this->soma_df($request->all()['1_2_1_4']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_1_4_1 = $this->soma_df($request->all()['1_2_1_4_1']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_1_4_2 = $this->soma_df($request->all()['1_2_1_4_2']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_1_4_3 = $this->soma_df($request->all()['1_2_1_4_3']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_1_4_4 = $this->soma_df($request->all()['1_2_1_4_4']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_2 = $this->soma_df($request->all()['1_2_2']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_2_1 = $this->soma_df($request->all()['1_2_2_1']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_2_2 = $this->soma_df($request->all()['1_2_2_2']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_2_3 = $this->soma_df($request->all()['1_2_2_3']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_2_4 = $this->soma_df($request->all()['1_2_2_4']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_3 = $this->soma_df($request->all()['1_2_3']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_3_1 = $this->soma_df($request->all()['1_2_3_1']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_3_1_1 = $this->soma_df($request->all()['1_2_3_1_1']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_3_1_2 = $this->soma_df($request->all()['1_2_3_1_2']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_3_1_3 = $this->soma_df($request->all()['1_2_3_1_3']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_3_1_4 = $this->soma_df($request->all()['1_2_3_1_4']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_3_1_5 = $this->soma_df($request->all()['1_2_3_1_5']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_3_1_6 = $this->soma_df($request->all()['1_2_3_1_6']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_3_2 = $this->soma_df($request->all()['1_2_3_2']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_3_2_1 = $this->soma_df($request->all()['1_2_3_2_1']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_3_2_2 = $this->soma_df($request->all()['1_2_3_2_2']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_3_2_3 = $this->soma_df($request->all()['1_2_3_2_3']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_3_2_4 = $this->soma_df($request->all()['1_2_3_2_4']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_3_2_5 = $this->soma_df($request->all()['1_2_3_2_5']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_3_2_6 = $this->soma_df($request->all()['1_2_3_2_6']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_3_3 = $this->soma_df($request->all()['1_2_3_3']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_4 = $this->soma_df($request->all()['1_2_4']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_4_1 = $this->soma_df($request->all()['1_2_4_1']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_4_2 = $this->soma_df($request->all()['1_2_4_2']);
+      $resultado1_2 = $resultado1_2 +  $resultado1_2_5 = $this->soma_df($request->all()['1_2_5']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_5_1 = $this->soma_df($request->all()['1_2_5_1']);
+      $resultado1_2 = $resultado1_2 + $resultado1_2_5_2 = $this->soma_df($request->all()['1_2_5_2']);
+      $resultado1_3 = $this->soma_df($request->all()['1_3']);
+      $resultado1 = $resultado1_1 + $resultado1_2 + $resultado1_3;
+
+      $resultado2 = 0;
+      $resultado2_1 = 0;
+      $resultado2_2 = 0;
+      $resultado2_3 = 0;
+      $resultado2_4 = 0;
+      $resultado2_1 = $this->soma_df($request->all()['2_1']);
+      $resultado2_1 = $resultado2_1 + $resultado2_1_1 = $this->soma_df($request->all()['2_1_1']);
+      $resultado2_1 = $resultado2_1 + $resultado2_1_1_1 = $this->soma_df($request->all()['2_1_1_1']);
+      $resultado2_1 = $resultado2_1 + $resultado2_1_1_2 = $this->soma_df($request->all()['2_1_1_2']);
+      $resultado2_1 = $resultado2_1 + $resultado2_1_1_3 = $this->soma_df($request->all()['2_1_1_3']);
+      $resultado2_1 = $resultado2_1 + $resultado2_1_1_4 = $this->soma_df($request->all()['2_1_1_4']);
+      $resultado2_1 = $resultado2_1 + $resultado2_1_1_5 = $this->soma_df($request->all()['2_1_1_5']);
+      $resultado2_1 = $resultado2_1 + $resultado2_1_1_6 = $this->soma_df($request->all()['2_1_1_6']);
+      $resultado2_1 = $resultado2_1 + $resultado2_1_1_7 = $this->soma_df($request->all()['2_1_1_7']);
+      $resultado2_2 = $this->soma_df($request->all()['2_2']);
+      $resultado2_2 = $resultado2_2 + $resultado2_2_1 = $this->soma_df($request->all()['2_2_1']);
+      $resultado2_2 = $resultado2_2 + $resultado2_2_1_1 = $this->soma_df($request->all()['2_2_1_1']);
+      $resultado2_2 = $resultado2_2 + $resultado2_2_1_2 = $this->soma_df($request->all()['2_2_1_2']);
+      $resultado2_2 = $resultado2_2 + $resultado2_2_1_3 = $this->soma_df($request->all()['2_2_1_3']);
+      $resultado2_2 = $resultado2_2 + $resultado2_2_1_4 = $this->soma_df($request->all()['2_2_1_4']);
+      $resultado2_2 = $resultado2_2 + $resultado2_2_1_5 = $this->soma_df($request->all()['2_2_1_5']);
+      $resultado2_2 = $resultado2_2 + $resultado2_2_1_6 = $this->soma_df($request->all()['2_2_1_6']);
+      $resultado2_2 = $resultado2_2 + $resultado2_2_1_7 = $this->soma_df($request->all()['2_2_1_7']);
+      $resultado2_2 = $resultado2_2 + $resultado2_2_1_8 = $this->soma_df($request->all()['2_2_1_8']);
+      $resultado2_3 = $this->soma_df($request->all()['2_3']);
+      $resultado2_3 = $resultado2_3 + $resultado2_3_1 = $this->soma_df($request->all()['2_3_1']);
+      $resultado2_3 = $resultado2_3 + $resultado2_3_1_1 = $this->soma_df($request->all()['2_3_1_1']);
+      $resultado2_3 = $resultado2_3 + $resultado2_3_1_2 = $this->soma_df($request->all()['2_3_1_2']);
+      $resultado2_3 = $resultado2_3 + $resultado2_3_2 = $this->soma_df($request->all()['2_3_2']);
+      $resultado2_3 = $resultado2_3 + $resultado2_3_2_1 = $this->soma_df($request->all()['2_3_2_1']);
+      $resultado2_3 = $resultado2_3 + $resultado2_3_2_2 = $this->soma_df($request->all()['2_3_2_2']);
+      $resultado2_3 = $resultado2_3 + $resultado2_3_3 = $this->soma_df($request->all()['2_3_3']);
+      $resultado2_3 = $resultado2_3 + $resultado2_3_3_1 = $this->soma_df($request->all()['2_3_3_1']);
+      $resultado2_3 = $resultado2_3 + $resultado2_3_3_2 = $this->soma_df($request->all()['2_3_3_2']);
+      $resultado2_3 = $resultado2_3 + $resultado2_3_4 = $this->soma_df($request->all()['2_3_4']);
+      $resultado2_3 = $resultado2_3 + $resultado2_3_4_1 = $this->soma_df($request->all()['2_3_4_1']);
+      $resultado2_3 = $resultado2_3 + $resultado2_3_4_2 = $this->soma_df($request->all()['2_3_4_2']);
+      $resultado2_3 = $resultado2_3 + $resultado2_3_4_3 = $this->soma_df($request->all()['2_3_4_3']);
+      $resultado2_3 = $resultado2_3 + $resultado2_3_5 = $this->soma_df($request->all()['2_3_5']);
+      $resultado2_4 = $this->soma_df($request->all()['2_4']);
+      $resultado2 = $resultado2_1 + $resultado2_2 + $resultado2_3 + $resultado2_4;
+
+      $resultado3 = 0;
+      $resultado3_1 = 0;
+      $resultado3_2 = 0;
+      $resultado3_3 = 0;
+      $resultado3_4 = 0;
+      $resultado3_5 = 0;
+      $resultado3_6 = 0;
+      $resultado3_7 = 0;
+      $resultado3_8 = 0;
+      $resultado3_9 = 0;
+      $resultado3_10 = 0;
+      $resultado3_11 = 0;
+      $resultado3_12 = 0;
+      $resultado3_13 = 0;
+      $resultado3_14 = 0;
+      $resultado3_15 = 0;
+      $resultado3_16 = 0;
+      $resultado3_17 = 0;
+      $resultado3_18 = 0;
+      $resultado3_1 = $this->soma_df($request->all()['3_1']);
+      $resultado3_1 = $resultado3_1 + $resultado3_1_1 = $this->soma_df($request->all()['3_1_1']);
+      $resultado3_1 = $resultado3_1 + $resultado3_1_2 = $this->soma_df($request->all()['3_1_2']);
+      $resultado3_2 = $this->soma_df($request->all()['3_2']);
+      $resultado3_3 = $this->soma_df($request->all()['3_3']);
+      $resultado3_4 = $this->soma_df($request->all()['3_4']);
+      $resultado3_4 = $resultado3_4 + $resultado3_4_1 = $this->soma_df($request->all()['3_4_1']);
+      $resultado3_4 = $resultado3_4 + $resultado3_4_2 = $this->soma_df($request->all()['3_4_2']);
+      $resultado3_4 = $resultado3_4 + $resultado3_4_3 = $this->soma_df($request->all()['3_4_3']);
+      $resultado3_4 = $resultado3_4 + $resultado3_4_4 = $this->soma_df($request->all()['3_4_4']);
+      $resultado3_5 = $this->soma_df($request->all()['3_5']);
+      $resultado3_6 = $this->soma_df($request->all()['3_6']);
+      $resultado3_6 = $resultado3_6 + $resultado3_6_1 = $this->soma_df($request->all()['3_6_1']);
+      $resultado3_6 = $resultado3_6 + $resultado3_6_2 = $this->soma_df($request->all()['3_6_2']);
+      $resultado3_6 = $resultado3_6 + $resultado3_6_3 = $this->soma_df($request->all()['3_6_3']);
+      $resultado3_6 = $resultado3_6 + $resultado3_6_4 = $this->soma_df($request->all()['3_6_4']);
+      $resultado3_6 = $resultado3_6 + $resultado3_6_5 = $this->soma_df($request->all()['3_6_5']);
+      $resultado3_6 = $resultado3_6 + $resultado3_6_6 = $this->soma_df($request->all()['3_6_6']);
+      $resultado3_6 = $resultado3_6 + $resultado3_6_7 = $this->soma_df($request->all()['3_6_7']);
+      $resultado3_6 = $resultado3_6 + $resultado3_6_8 = $this->soma_df($request->all()['3_6_8']);
+      $resultado3_7 = $this->soma_df($request->all()['3_7']);
+      $resultado3_7 = $resultado3_7 + $resultado3_7_1 = $this->soma_df($request->all()['3_7_1']);
+      $resultado3_7 = $resultado3_7 + $resultado3_7_2 = $this->soma_df($request->all()['3_7_2']);
+      $resultado3_8 = $this->soma_df($request->all()['3_8']);
+      $resultado3_9 = $this->soma_df($request->all()['3_9']);
+      $resultado3_10 = $this->soma_df($request->all()['3_10_']);
+      $resultado3_11 = $this->soma_df($request->all()['3_11']);
+      $resultado3_11 = $resultado3_11 + $resultado3_11_1 = $this->soma_df($request->all()['3_11_1']);
+      $resultado3_11 = $resultado3_11 + $resultado3_11_2 = $this->soma_df($request->all()['3_11_2']);
+      $resultado3_12 = $this->soma_df($request->all()['3_12']);
+      $resultado3_13 = $this->soma_df($request->all()['3_13']);
+      $resultado3_13 = $resultado3_13 + $resultado3_13_1 = $this->soma_df($request->all()['3_13_1']);
+      $resultado3_13 = $resultado3_13 + $resultado3_13_2 = $this->soma_df($request->all()['3_13_2']);
+      $resultado3_14 = $this->soma_df($request->all()['3_14']);
+      $resultado3_15 = $this->soma_df($request->all()['3_15']);
+      $resultado3_15 = $resultado3_15 + $resultado3_15_1 = $this->soma_df($request->all()['3_15_1']);
+      $resultado3_15 = $resultado3_15 + $resultado3_15_2 = $this->soma_df($request->all()['3_15_2']);
+      $resultado3_15 = $resultado3_15 + $resultado3_15_3 = $this->soma_df($request->all()['3_15_3']);
+      $resultado3_16 = $this->soma_df($request->all()['3_16']);
+      $resultado3_17 = $this->soma_df($request->all()['3_17']);
+      $resultado3_17 = $resultado3_17 + $resultado3_17_1 = $this->soma_df($request->all()['3_17_1']);
+      $resultado3_17 = $resultado3_17 + $resultado3_17_2 = $this->soma_df($request->all()['3_17_2']);
+      $resultado3_17 = $resultado3_17 + $resultado3_17_3 = $this->soma_df($request->all()['3_17_3']);
+      $resultado3_17 = $resultado3_17 + $resultado3_17_4 = $this->soma_df($request->all()['3_17_4']);
+      $resultado3_17 = $resultado3_17 + $resultado3_17_5 = $this->soma_df($request->all()['3_17_5']);
+      $resultado3_17 = $resultado3_17 + $resultado3_17_6 = $this->soma_df($request->all()['3_17_6']);
+      $resultado3_18 = $this->soma_df($request->all()['3_18']);
+      $resultado3 = $resultado3_1 + $resultado3_2 + $resultado3_3 + $resultado3_4 + $resultado3_5 + $resultado3_6 + $resultado3_7 + $resultado3_8 + $resultado3_9 + $resultado3_10 + $resultado3_11 + $resultado3_12 + $resultado3_13 + $resultado3_14 + $resultado3_15 + $resultado3_16 + $resultado3_17 + $resultado3_18; 
+
+      $array = ['Ativo Circulante 1.1' => $resultado1_1,
+        'Ativo Nao Circulante 1.2' => $resultado1_2,
+        'Compensacao (Ativo) 1.3' => $resultado1_3,
+        'TOTAL Ativo 1' => $resultado1,
+        'Passivo Circulante 2.1' => $resultado2_1,
+        'Passivo Nao Circulante 2.2' => $resultado2_2,
+        'Patrimonio Liquido 2.3' => $resultado2_3,
+        'Compensacao (Passivo) 2.4' => $resultado2_4,
+        'TOTAL Passivo e Patrimonio Liquido 2' => $resultado2,
+        'Ingressos e Receitas Brutas 3.1' => $resultado3_1,
+        '(-) Impostos Contribuicoes S/ Vendas E Servicos 3.2' => $resultado3_2,
+        'Ingressos e Receitas Liquidas 3.3' => $resultado3_3,
+        '(-) Custos 3.4' => $resultado3_4,
+        'Sobra e Margem Bruta 3.5' => $resultado3_5,
+        '(-) Dispendios e Despesas Operacionais 3.6' => $resultado3_6,
+        'Outros Resultados Operacionais 3.7' => $resultado3_7,
+        'Resultado de Equivalencia Patrimonial 3.8' => $resultado3_8,
+        'Resultado de Operacoes Com Coligadas/Controladas 3.9' => $resultado3_9,
+        'Sobra/Perda Operacional (Antes Result Financ) 3.10' => $resultado3_10,
+        'Resultado Financeiro Liquido 3.11' => $resultado3_11,
+        'Sobra/Perda Exercicio (Antes dos Tributos) 3.12' => $resultado3_12,
+        '(-) Provisao de Impostos S/ Resultado 3.13' => $resultado3_13,
+        'Sobra/Perda Liquida Exercicio (Antes Ajustes) 3.14' => $resultado3_14,
+        '(+/-) Ajustes Legais 3.15' => $resultado3_15,
+        'Sobra/Perda Liquida Exercicio (Antes Destin) 3.16' => $resultado3_16,
+        '(+/-) Destinacoes Legais e Estatutarias 3.17' => $resultado3_17,
+        'Sobras ou Perdas a Disposicao da AGO 3.18' => $resultado3_18,
+        'TOTAL Contas de Resultado 3' => $resultado3
+      ];
+      
+      // return $array;
+      
+      $id = DB::table('coop.demonstrativo_fin_agro_new')
+        ->insert([
+        'CNPJ_completo'=>$cnpjcompleto, 'ano'=> $ano, 'UF'=>$coop->uf, 'Ativo_Circ'=>$resultado1_1, 
+        'Disponibilidades'=>$resultado1_1_1, 'Ativo_Fin'=>$resultado1_1_2, 'Cred'=>$resultado1_1_3,
+        'Cred_Coop'=>$resultado1_1_3_1, 'Cred_Coop_VR'=>$resultado1_1_3_1_1, 'Cred_Coop_PECLD'=>$resultado1_1_3_1_2,
+         'Cred_Coop_AVP'=>$resultado1_1_3_1_3, 'Clientes'=>$resultado1_1_3_2, 'Clientes_VR'=>$resultado1_1_3_2_1,
+        'Clientes_PECLD'=>$resultado1_1_3_2_2, 'Clientes_AVP'=>$resultado1_1_3_2_3, 'OutrosCred'=>$resultado1_1_3_3,
+         'OutrosCred_VR'=>$resultado1_1_3_3_1, 'OutrosCred_PECLD'=>$resultado1_1_3_3_2, 'OutrosCred_AVP'=>$resultado1_1_3_3_3,
+        'Estoq'=>$resultado1_1_4, 'EstoqProp'=>$resultado1_1_4_1, 'EstoqProp_PAgro'=>$resultado1_1_4_1_1,
+        'EstoqProp_BF'=>$resultado1_1_4_1_2, 'EstoqProp_PI'=>$resultado1_1_4_1_3, 'EstoqProp_AB'=>$resultado1_1_4_1_4, 
+        'EstoqProp_Almox'=>$resultado1_1_4_1_5, 'EstoqProp_AAP'=>$resultado1_1_4_1_6, 'EstoqMerc'=>$resultado1_1_4_2, 
+        'EstoqMerc_Coop'=>$resultado1_1_4_2_1, 'EstoqMerc_Terc'=>$resultado1_1_4_2_2, 'DispAntec'=>$resultado1_1_5, 
+        'Ativo_NCirc'=>$resultado1_2, 'RLP'=>$resultado1_2_1, 'Coop_RLP'=>$resultado1_2_1_1, 'Coop_Rec_RLP'=>$resultado1_2_1_1_1, 
+        'Coop_PECLD_RLP'=>$resultado1_2_1_1_2, 'Coop_AVP_RLP'=>$resultado1_2_1_1_3, 'Clientes_RLP'=>$resultado1_2_1_2, 
+        'Clientes_Receb_RLP'=>$resultado1_2_1_2_1, 'Clientes_PECLD_RLP'=>$resultado1_2_1_2_2, 'Clientes_AVP_RLP'=>$resultado1_2_1_2_3, 
+        'EstoqForm'=>$resultado1_2_1_3, 'Outros_LP'=>$resultado1_2_1_4, 'Outros_LP_VR'=>$resultado1_2_1_4_1, 
+        'Outros_Jud'=>$resultado1_2_1_4_2, 'Outros_PECLD'=>$resultado1_2_1_4_3, 'Outros_AVP'=>$resultado1_2_1_4_4, 
+        'Invest'=>$resultado1_2_2, 'Invest_Coop'=>$resultado1_2_2_1, 'Invest_PI'=>$resultado1_2_2_2, 'Invest_outros'=>$resultado1_2_2_3, 
+        'Invest_AVP'=>$resultado1_2_2_4, 'Imob'=>$resultado1_2_3, 'BensCorp'=>$resultado1_2_3_1, 'Imoveis'=>$resultado1_2_3_1_1, 
+        'Maquinas'=>$resultado1_2_3_1_2, 'Moveis'=>$resultado1_2_3_1_3, 'Veiculos'=>$resultado1_2_3_1_4, 'BensCorp_Outros'=>$resultado1_2_3_1_5, 
+        'Ativo_Bio'=>$resultado1_2_3_1_6, 'Dep_Acum'=>$resultado1_2_3_2, 'Dep_Acum_Imoveis'=>$resultado1_2_3_2_1, 
+        'Dep_Acum_Maquinas'=>$resultado1_2_3_2_2, 'Dep_Acum_Moveis'=>$resultado1_2_3_2_3, 'Dep_Acum_Veiculos'=>$resultado1_2_3_2_4,
+        'Dep_Acum_Outros'=>$resultado1_2_3_2_5, 'Red_Ativo_Bio'=>$resultado1_2_3_2_6, 'AAP_BensCorp'=>$resultado1_2_3_3, 
+        'Intang'=>$resultado1_2_4, 'BensIncorp'=>$resultado1_2_4_1, 'Amort_BensIncorp'=>$resultado1_2_4_2, 'Diferido'=>$resultado1_2_5, 
+        'Ativo_Diferido'=>$resultado1_2_5_1, 'Amort_Diferido'=>$resultado1_2_5_2, 'Ativo_Total'=>$resultado1, 'Passivo_Circ'=>$resultado2_1, 
+        'Obrigacoes'=>$resultado2_1_1, 'Emp_Fin'=>$resultado2_1_1_1, 'Coop_VP'=>$resultado2_1_1_2, 'Fornecedores'=>$resultado2_1_1_3, 
+        'Obr_Tribut'=>$resultado2_1_1_4, 'Obr_Trab'=>$resultado2_1_1_5, 'Obr_outras'=>$resultado2_1_1_6, 'Obr_AVP'=>$resultado2_1_1_7, 
+        'Passivo_NCirc'=>$resultado2_2, 'Obrigacoes_LP'=>$resultado2_2_1, 'Emp_Fin_LP'=>$resultado2_2_1_1, 'Coop_VP_LP'=>$resultado2_2_1_2, 
+        'Fornecedores_LP'=>$resultado2_2_1_3, 'Obr_Tribut_LP'=>$resultado2_2_1_4, 'Obr_Trab_LP'=>$resultado2_2_1_5, 
+        'Prov_Fiscais_LP'=>$resultado2_2_1_6, 'Obr_outras_LP'=>$resultado2_2_1_7, 'Obr_AVP_LP'=>$resultado2_2_1_8, 'PL'=>$resultado2_3, 'CS'=>$resultado2_3_1, 
+        'CS_Sub'=>$resultado2_3_1_1, 'CS_a_Integ'=>$resultado2_3_1_2, 'Res_Cap'=>$resultado2_3_2, 'Doa_SubFiscais'=>$resultado2_3_2_1, 
+        'Res_Cap_Outras'=>$resultado2_3_2_2, 'PL_AAP_Total'=>$resultado2_3_3, 'PL_AAP'=>$resultado2_3_3_1, 'Res_Reav'=>$resultado2_3_3_2, 
+        'Res_Sobras'=>$resultado2_3_4, 'Res_Legal'=>$resultado2_3_4_1, 'RATES'=>$resultado2_3_4_2, 'Res_Outras'=>$resultado2_3_4_3, 
+        'Sobras_AGO'=>$resultado2_3_5, 'PassivoPL_Total'=>$resultado2, 'Ingressos_Bruto'=>$resultado3_1, 'Ingressos_Venda'=>$resultado3_1_1,
+        'Ingressos_Servicos'=>$resultado3_1_2, 'Impostos_Ingresso'=>$resultado3_2, 'Ingressos_Liq'=>$resultado3_3, 'Custos'=>$resultado3_4, 
+        'Repasse_Vendas'=>$resultado3_4_1, 'Repasse_Servicos'=>$resultado3_4_2, 'Custos_Vendas'=>$resultado3_4_3, 'Custos_Servicos'=>$resultado3_4_4, 
+        'Sobra_Bruta'=>$resultado3_5, 'Desp_Op'=>$resultado3_6, 'Desp_Op_Comerc'=>$resultado3_6_1, 'Desp_Op_Pesssoal'=>$resultado3_6_2, 
+        'Desp_Op_Adm'=>$resultado3_6_3, 'Desp_Op_Trib'=>$resultado3_6_4, 'Desp_Op_Tec'=>$resultado3_6_5, 'Desp_Op_Dep'=>$resultado3_6_6, 
+        'Desp_Op_Outras'=>$resultado3_6_7, 'Result_Op_Outros'=>$resultado3_7, 'Ingressos_Outros'=>$resultado3_7_1, 'Disp_Outros'=>$resultado3_7_2, 
+        'REP'=>$resultado3_8, 'Result_Intragrupo'=>$resultado3_9, 'Sobras_Op'=>$resultado3_10, 'Result_Fin_Liq'=>$resultado3_11, 
+        'Ingressos_Fin'=>$resultado3_11_1, 'Disp_Fin'=>$resultado3_11_2, 'SAIR'=>$resultado3_12, 'Prov_Imp'=>$resultado3_13, 'IRPJ'=>$resultado3_13_1, 
+        'CSSL'=>$resultado3_13_2, 'Sobras_Antes_Ajustes'=>$resultado3_14, 'Ajustes_Legais'=>$resultado3_15, 'Dest_Inc_Fisc'=>$resultado3_15_1, 
+        'Cred_Fisc'=>$resultado3_15_2, 'Reavaliação'=>$resultado3_15_3, 'Sobras_Liq'=>$resultado3_16, 'Destinacoes'=>$resultado3_17, 
+        'Dest_Res_Legal'=>$resultado3_17_1, 'Dest_RATES'=>$resultado3_17_2, 'Part_Result'=>$resultado3_17_3, 'Capitalizacao'=>$resultado3_17_4, 
+        'Dest_Outras_Res'=>$resultado3_17_5, 'Util_Res'=>$resultado3_17_6, 'SobrasAGO'=>$resultado3_18, 'ResultadoExercicio'=>$resultado3, 'cnpj_sgo'=>$cnpjcompleto,
+      ]);
+      return redirect()->back()->with('status', 'Demonstrativo financeiro cadastrado com sucesso.');
+    }
+    return redirect()->back()->with('status', 'Já existe com esse CNPJ e ANO um demonstrativo no Banco de Dados.');
   }
-
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
   protected $array_df_1 = [
     [
       'codigo' => '1.1',
@@ -942,13 +1248,13 @@ class CoopController extends Controller
       'nome' => 'Cooperados',
       'explicacao' => 'SubTOTAL - calculado por fórmula',
     ],
-    [
+    [ 
       'codigo' => '1.1.3.1.1',
       'nome' => 'Cooperados - Valores a Receber',
       'explicacao' => 'Débitos de cooperados; cooperados; cooperados C/c em funcionamento',
     ],
-    [
-      'codigo' => '1.1.3.1.2',
+    
+[      'codigo' => '1.1.3.1.2',
       'nome' => '(-) Perdas Estimadas c/ CLD - Cooperados',
       'explicacao' => 'PLCD ou PDD cooperados',
     ],
@@ -1113,11 +1419,6 @@ class CoopController extends Controller
       'explicacao' => 'Estoque de Longo Prazo',
     ],
     [
-      'codigo' => '1.2.1.3',
-      'nome' => 'Estoques em Formação',
-      'explicacao' => 'Estoque de Longo Prazo',
-    ],
-    [
       'codigo' => '1.2.1.4',
       'nome' => 'Outros - Longo Prazo',
       'explicacao' => 'SubTOTAL - calculado por fórmula',
@@ -1203,6 +1504,11 @@ class CoopController extends Controller
       'explicacao' => 'Benfeitorias em imóveis de terceiros, imobilização vinculada, consorcios não contemplados',
     ],
     [
+      'codigo' => '1.2.3.1.6',
+      'nome' => 'Ativo Biológico de Produção',
+      'explicacao' => 'Plantas e animais para produção',
+    ],
+    [
       'codigo' => '1.2.3.2',
       'nome' => '(-) Depreciação Acumulada',
       'explicacao' => 'SubTOTAL - calculado por fórmula mas quando as depreciações não são especificadas pela cooperativa alocar nesta conta.',
@@ -1275,11 +1581,6 @@ class CoopController extends Controller
     [
       'codigo' => '1.3',
       'nome' => 'Compensação (Ativo)',
-      'explicacao' => 'Contas novas PR',
-    ],
-    [
-      'codigo' => '1.3.1',
-      'nome' => 'Compensação - Ativo',
       'explicacao' => 'Contas novas PR',
     ],
     [
@@ -1466,11 +1767,6 @@ class CoopController extends Controller
       'explicacao' => 'Contas novas PR',
     ],
     [
-      'codigo' => '2.4.1',
-      'nome' => 'Compensação - Passivo',
-      'explicacao' => 'Contas novas PR',
-    ],
-    [
       'codigo' => '2',
       'nome' => 'TOTAL Passivo e Patrimônio Líquido',
       'explicacao' => 'TOTAL - calculado por fórmula',
@@ -1540,42 +1836,42 @@ class CoopController extends Controller
     ],
     [
       'codigo' => '3.6.1',
-      'nome' => 'Comerciais',
+      'nome' => '(-) Comerciais',
       'explicacao' => 'Dispêndios diretos ao produto; Dispendio com vendas, mercadorias e embalagens, frete, bonificação, descontos, comissões,  fornecimento de mercadoria',
     ],
     [
       'codigo' => '3.6.2',
-      'nome' => 'de Pessoal',
+      'nome' => '(-) de Pessoal',
       'explicacao' => 'Dispêndio com pessoal, honorários diretoria',
     ],
     [
       'codigo' => '3.6.3',
-      'nome' => 'Administrativas',
+      'nome' => '(-) Administrativas',
       'explicacao' => 'Dispêndios gerais e administrativos, dispêndio com funcionamento, ocupação, utilidades, publicidade e propaganda',
     ],
     [
       'codigo' => '3.6.4',
-      'nome' => 'Tributárias',
+      'nome' => '(-) Tributárias',
       'explicacao' => 'Dispêndios tributários, parcelamento refis',
     ],
     [
       'codigo' => '3.6.5',
-      'nome' => 'Técnicas',
+      'nome' => '(-) Técnicas',
       'explicacao' => 'Dispendios com manutenção, serviços técnicos',
     ],
     [
       'codigo' => '3.6.6',
-      'nome' => 'de Depreciação',
+      'nome' => '(-) de Depreciação',
       'explicacao' => 'Despesa com depreciação ',
     ],
     [
       'codigo' => '3.6.7',
-      'nome' => 'Outras',
+      'nome' => '(-) Outras',
       'explicacao' => 'Despesas operacionais, despesas não dedutíveis',
     ],
     [
       'codigo' => '3.6.8',
-      'nome' => 'Juros sobre Capital Proprio',
+      'nome' => '(-) Juros sobre Capital Proprio',
       'explicacao' => 'Juros sobre capital integralizado',
     ],
     [
@@ -1604,7 +1900,7 @@ class CoopController extends Controller
       'explicacao' => '',
     ],
     [
-      'codigo' => '3.10',
+      'codigo' => '3.10.',
       'nome' => 'Sobra/Perda Operacional (Antes Result Financ)',
       'explicacao' => 'SubTOTAL - calculado por fórmula',
     ],
@@ -1635,12 +1931,12 @@ class CoopController extends Controller
     ],
     [
       'codigo' => '3.13.1',
-      'nome' => 'Provisão IRPJ',
+      'nome' => '(-) Provisão IRPJ',
       'explicacao' => 'Imposto de renda',
     ],
     [
       'codigo' => '3.13.2',
-      'nome' => 'Provisão CSSL',
+      'nome' => '(-) Provisão CSSL',
       'explicacao' => 'Contribuição social',
     ],
     [
